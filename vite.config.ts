@@ -10,9 +10,13 @@ export default defineConfig({
   build: {
     lib: {
       cssFileName: "styles",
-      entry: resolve(currentDir, "src/index.ts"),
+      entry: {
+        morass: resolve(currentDir, "src/index.ts"),
+        reminders: resolve(currentDir, "src/reminders.ts"),
+      },
       name: "Morass",
-      fileName: "morass",
+      fileName: (format, entryName) =>
+        `${entryName}.${format === "es" ? "js" : "cjs"}`,
       formats: ["es", "cjs"],
     },
     rollupOptions: {

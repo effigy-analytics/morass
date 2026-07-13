@@ -1,10 +1,14 @@
 {
   "name": "@effigy-analytics/morass",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Composable React UI primitives for durable product interfaces.",
   "type": "module",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": "Effigy Analytics",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/effigy-analytics/morass.git"
+  },
   "sideEffects": [
     "**/*.css"
   ],
@@ -16,7 +20,6 @@
     "README.md"
   ],
   "publishConfig": {
-    "access": "restricted",
     "registry": "https://npm.pkg.github.com"
   },
   "exports": {
@@ -24,6 +27,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/morass.js",
       "require": "./dist/morass.cjs"
+    },
+    "./reminders": {
+      "types": "./dist/reminders.d.ts",
+      "import": "./dist/reminders.js",
+      "require": "./dist/reminders.cjs"
     },
     "./styles.css": "./dist/styles.css"
   },
