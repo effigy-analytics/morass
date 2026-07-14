@@ -26,6 +26,14 @@ jobs:
       - run: npm ci
       - run: npm run check
 
+      # project .npmrc points the scope at public npmjs for consumers and
+      # outranks both setup-node's registry-url and publishConfig.registry;
+      # this job must pin the scope to GH Packages for view + publish
+      - name: Pin scope registry to GitHub Packages
+        run: |
+          echo "@effigy-analytics:registry=https://npm.pkg.github.com" > .npmrc
+          test "$(npm config get @effigy-analytics:registry)" = "https://npm.pkg.github.com"
+
       - name: Verify release tag matches package version
         if: github.event_name == 'release'
         run: |
