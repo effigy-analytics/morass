@@ -1,4 +1,5 @@
 import type {
+  AnchorHTMLAttributes,
   ButtonHTMLAttributes,
   HTMLAttributes,
   InputHTMLAttributes,
@@ -32,6 +33,26 @@ export function Button({
       {icon ? <span className="m-button__icon">{icon}</span> : null}
       {children ? <span className="m-button__label">{children}</span> : null}
     </button>
+  );
+}
+
+export interface ButtonLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  icon?: ReactNode;
+  variant?: ButtonVariant;
+}
+
+export function ButtonLink({
+  children,
+  className,
+  icon,
+  variant = "secondary",
+  ...props
+}: ButtonLinkProps) {
+  return (
+    <a className={cx("m-button", `m-button--${variant}`, className)} {...props}>
+      {icon ? <span className="m-button__icon">{icon}</span> : null}
+      {children ? <span className="m-button__label">{children}</span> : null}
+    </a>
   );
 }
 

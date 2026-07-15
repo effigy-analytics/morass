@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   AppFrame,
   Button,
+  ButtonLink,
   Card,
   Metric,
   Modal,
@@ -27,6 +28,25 @@ describe("component primitives", () => {
     expect(html).toContain('class="m-button__icon"');
     expect(html).toContain('class="m-button__label"');
     expect(html).toContain("Add item");
+  });
+
+  it("renders ButtonLink as an anchor with button styling", () => {
+    const html = renderToStaticMarkup(
+      <ButtonLink
+        href="/docs"
+        icon={<span data-icon="book" />}
+        variant="primary"
+      >
+        Read the docs
+      </ButtonLink>,
+    );
+
+    expect(html).toContain("<a ");
+    expect(html).toContain('href="/docs"');
+    expect(html).toContain('class="m-button m-button--primary"');
+    expect(html).toContain('class="m-button__icon"');
+    expect(html).toContain('class="m-button__label"');
+    expect(html).not.toContain("type=");
   });
 
   it("renders cards, metrics, status pills, and app frame regions", () => {
