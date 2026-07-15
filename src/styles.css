@@ -34,6 +34,72 @@
       "Segoe UI", sans-serif;
   }
 
+  [data-m-theme="dark"] {
+    --m-color-bg: #121817;
+    --m-color-surface: #1a2321;
+    --m-color-surface-muted: #15201d;
+    --m-color-text: #e6ebe9;
+    --m-color-text-muted: #9fb0ac;
+    --m-color-border: #2c3835;
+    --m-color-primary: #3ba69d;
+    --m-color-primary-strong: #5fc0b7;
+    --m-color-danger: #f97066;
+    --m-color-danger-bg: rgb(180 35 24 / 0.16);
+    --m-color-warning: #fdb022;
+    --m-color-warning-bg: rgb(180 83 9 / 0.16);
+    --m-color-success: #4cc38a;
+    --m-color-success-bg: rgb(4 120 87 / 0.16);
+    --m-color-info: #7ba6f7;
+    --m-color-info-bg: rgb(29 78 216 / 0.16);
+    --m-color-neutral: #b8c4c0;
+    --m-color-neutral-bg: #243230;
+    --m-color-on-primary: #0c1514;
+    --m-color-sidebar-bg: #0e2523;
+    --m-color-sidebar-text: #e6ebe9;
+    --m-color-step-bg: #243230;
+    --m-color-input-bg: #151d1b;
+    --m-color-header-bg: rgb(26 35 33 / 0.92);
+    --m-color-backdrop: rgb(0 0 0 / 0.6);
+    --m-focus-ring: rgb(95 192 183 / 0.35);
+    --m-shadow: 0 16px 40px rgb(0 0 0 / 0.4);
+    --m-shadow-modal: 0 24px 80px rgb(0 0 0 / 0.55);
+  }
+
+  /* Auto block: keep identical to [data-m-theme="dark"] above — enforced
+     by the sync test in styles.test.ts. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-m-theme]) {
+      --m-color-bg: #121817;
+      --m-color-surface: #1a2321;
+      --m-color-surface-muted: #15201d;
+      --m-color-text: #e6ebe9;
+      --m-color-text-muted: #9fb0ac;
+      --m-color-border: #2c3835;
+      --m-color-primary: #3ba69d;
+      --m-color-primary-strong: #5fc0b7;
+      --m-color-danger: #f97066;
+      --m-color-danger-bg: rgb(180 35 24 / 0.16);
+      --m-color-warning: #fdb022;
+      --m-color-warning-bg: rgb(180 83 9 / 0.16);
+      --m-color-success: #4cc38a;
+      --m-color-success-bg: rgb(4 120 87 / 0.16);
+      --m-color-info: #7ba6f7;
+      --m-color-info-bg: rgb(29 78 216 / 0.16);
+      --m-color-neutral: #b8c4c0;
+      --m-color-neutral-bg: #243230;
+      --m-color-on-primary: #0c1514;
+      --m-color-sidebar-bg: #0e2523;
+      --m-color-sidebar-text: #e6ebe9;
+      --m-color-step-bg: #243230;
+      --m-color-input-bg: #151d1b;
+      --m-color-header-bg: rgb(26 35 33 / 0.92);
+      --m-color-backdrop: rgb(0 0 0 / 0.6);
+      --m-focus-ring: rgb(95 192 183 / 0.35);
+      --m-shadow: 0 16px 40px rgb(0 0 0 / 0.4);
+      --m-shadow-modal: 0 24px 80px rgb(0 0 0 / 0.55);
+    }
+  }
+
   * {
     box-sizing: border-box;
   }

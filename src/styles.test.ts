@@ -61,4 +61,12 @@ describe("styles.css invariants", () => {
     );
     expect(rawColors).toBeNull();
   });
+
+  it("keeps the dark theme block and the OS-auto block in sync", () => {
+    const dark = blockOf(css, '[data-m-theme="dark"]');
+    const auto = blockOf(css, ":root:not([data-m-theme])");
+    expect(dark).not.toBeNull();
+    expect(auto).not.toBeNull();
+    expect(declarationsOf(auto ?? "")).toEqual(declarationsOf(dark ?? ""));
+  });
 });
