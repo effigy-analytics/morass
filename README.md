@@ -52,16 +52,10 @@ A theme is a token set. Morass ships two:
 - **Default (light):** declared at `:root`.
 - **Dark:** applied when an ancestor has `data-m-theme="dark"`, or automatically when the OS prefers dark and no `data-m-theme` attribute is set.
 
-```html
-<html data-m-theme="dark">
-  <!-- force dark -->
-  <html data-m-theme="light">
-    <!-- force light (disables OS auto-switching) -->
-    <html>
-      <!-- follow the OS preference -->
-    </html>
-  </html>
-</html>
+```text
+<html data-m-theme="dark">   force dark
+<html data-m-theme="light">  force light (disables OS auto-switching)
+<html>                       follow the OS preference
 ```
 
 Tokens cascade, so `data-m-theme` works on any subtree, not just the document root. Custom themes are plain CSS — override any `--m-*` token in unlayered styles, or define a named theme:
