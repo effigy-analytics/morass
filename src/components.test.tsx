@@ -146,12 +146,11 @@ describe("component primitives", () => {
     expect(html).toContain('class="m-hero__actions"');
   });
 
-  it("renders tabs with accessible tablist state and emits selected values", () => {
-    const onValueChange = vi.fn();
+  it("renders tabs with accessible tablist state", () => {
     const element = (
       <Tabs
         aria-label="Sections"
-        onValueChange={onValueChange}
+        onValueChange={() => {}}
         tabs={[
           { label: "Home", value: "home" },
           { label: "Personal", value: "personal" },

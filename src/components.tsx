@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useInsertionEffect, useRef } from "react";
 import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
@@ -295,7 +295,7 @@ export function Tabs<TValue extends string>({
             tabRefs.current[index] = element;
           }}
           role="tab"
-          tabIndex={tab.value === value ? 0 : -1}
+          tabIndex={index === activeIndex ? 0 : -1}
           type="button"
         >
           {tab.label}
@@ -341,7 +341,13 @@ export interface ModalProps {
 export function Modal({ actions, children, onClose, open, title }: ModalProps) {
   const panelRef = useRef<HTMLElement>(null);
   const onCloseRef = useRef(onClose);
-  onCloseRef.current = onClose;
+  // Insertion effect, not passive: it flushes synchronously during commit,
+  // so a keydown can never land between paint and the ref refresh and call
+  // a stale onClose. (A passive effect flushes after paint; a render-phase
+  // write breaks under concurrent rendering.)
+  useInsertionEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   useEffect(() => {
     if (!open) {
@@ -375,6 +381,11 @@ export function Modal({ actions, children, onClose, open, title }: ModalProps) {
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
       const active = document.activeElement;
+      if (!(active instanceof Node) || !panel.contains(active)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+        return;
+      }
       if (event.shiftKey && (active === first || active === panel)) {
         event.preventDefault();
         last.focus();

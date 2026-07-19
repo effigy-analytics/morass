@@ -78,11 +78,49 @@ describe("validateTheme", () => {
     ).not.toThrow();
   });
 
+  it("returns failure bg chains that do not alias REQUIRED_PAIRS", () => {
+    const result = validateTheme(
+      themeWith({
+        "--m-color-primary": "#5bb89c",
+        "--m-color-on-primary": "#ffffff",
+      }),
+    );
+    const failure = result.failures.find(
+      (candidate) => candidate.bg[0] === "--m-color-primary",
+    );
+    const contractPair = REQUIRED_PAIRS.find(
+      (pair) => pair.bg[0] === "--m-color-primary",
+    );
+    expect(failure).toBeDefined();
+    expect(failure?.bg).toEqual(contractPair?.bg);
+    expect(failure?.bg).not.toBe(contractPair?.bg);
+  });
+
   it("names a real surface for every pair", () => {
     for (const pair of REQUIRED_PAIRS) {
       expect(pair.context.length).toBeGreaterThan(0);
       expect(pair.bg.length).toBeGreaterThan(0);
     }
+  });
+
+  it("throws on an rgb() channel above 255 instead of computing nonsense", () => {
+    expect(() =>
+      validateTheme(themeWith({ "--m-color-primary": "rgb(300 0 0)" })),
+    ).toThrow("--m-color-primary");
+  });
+
+  it("throws on an alpha above 1", () => {
+    expect(() =>
+      validateTheme(themeWith({ "--m-color-primary": "rgb(0 0 0 / 1.5)" })),
+    ).toThrow("--m-color-primary");
+  });
+
+  it("throws on a NaN alpha instead of passing vacuously", () => {
+    // "1.5.2" matches [\d.]+ but Number() yields NaN; NaN ratios compare
+    // false against the threshold, so without a guard this silently passes.
+    expect(() =>
+      validateTheme(themeWith({ "--m-color-primary": "rgb(0 0 0 / 1.5.2)" })),
+    ).toThrow("--m-color-primary");
   });
 
   it("rejects a malformed rgb() value without catastrophic backtracking", () => {

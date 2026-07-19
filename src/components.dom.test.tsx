@@ -44,6 +44,46 @@ describe("Modal keyboard behavior", () => {
     expect(document.activeElement).toBe(buttons[buttons.length - 1]);
   });
 
+  it("recaptures Tab into the panel when focus has escaped it", () => {
+    // getAllByRole queries baseElement (document.body) and would see the
+    // outside button too — query the recapture targets by name.
+    const outside = document.createElement("button");
+    document.body.append(outside);
+    const { view } = renderModal();
+    outside.focus();
+    fireEvent.keyDown(document, { key: "Tab" });
+    expect(document.activeElement).toBe(
+      view.getByRole("button", { name: "Close modal" }),
+    );
+    outside.remove();
+  });
+
+  it("recaptures Shift+Tab to the last focusable when focus has escaped", () => {
+    const outside = document.createElement("button");
+    document.body.append(outside);
+    const { view } = renderModal();
+    outside.focus();
+    fireEvent.keyDown(document, { key: "Tab", shiftKey: true });
+    expect(document.activeElement).toBe(
+      view.getByRole("button", { name: "second" }),
+    );
+    outside.remove();
+  });
+
+  it("pins focus to the panel when no focusable element remains", () => {
+    // The handler queries live DOM per keydown, so content that loses its
+    // focusables dynamically hits the fallback (Close normally prevents this).
+    const { view } = renderModal();
+    const panel = view.getByRole("dialog");
+    view.getByRole("button", { name: "first" }).focus();
+    for (const button of panel.querySelectorAll("button")) {
+      button.remove();
+    }
+    expect(document.activeElement).not.toBe(panel);
+    fireEvent.keyDown(document, { key: "Tab" });
+    expect(document.activeElement).toBe(panel);
+  });
+
   it("restores focus to the previously focused element on close", () => {
     const outside = document.createElement("button");
     document.body.append(outside);
@@ -105,6 +145,26 @@ describe("Tabs keyboard behavior", () => {
     const view = render(<TabsHarness />);
     const tabs = view.getAllByRole("tab");
     expect(tabs.map((tab) => tab.tabIndex)).toEqual([0, -1, -1]);
+  });
+
+  it("keeps the first tab reachable when value matches no tab", () => {
+    const view = render(
+      <Tabs
+        aria-label="Demo"
+        onValueChange={vi.fn()}
+        tabs={[
+          { label: "A", value: "a" },
+          { label: "B", value: "b" },
+        ]}
+        value="missing"
+      />,
+    );
+    const tabs = view.getAllByRole("tab");
+    expect(tabs.map((tab) => tab.tabIndex)).toEqual([0, -1]);
+    expect(tabs.map((tab) => tab.getAttribute("aria-selected"))).toEqual([
+      "false",
+      "false",
+    ]);
   });
 
   it("moves selection right with wrapping and focuses the new tab", () => {

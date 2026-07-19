@@ -108,8 +108,8 @@ const theme = Object.fromEntries(
 validateTheme(theme);
 ```
 
-`validateTheme` throws if a contract token is missing or unparseable —
-a typo'd token must not pass as vacuously valid. Borders and focus rings
+`validateTheme` throws if a contract token is missing, unparseable, or
+out of range — a typo'd token must not pass as vacuously valid. Borders and focus rings
 are not in contract v1 (they're a divider aesthetic, not text); see the
 0.4.0 design doc for the rationale.
 
