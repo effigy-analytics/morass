@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
@@ -8,6 +9,9 @@ import type {
   SelectHTMLAttributes,
 } from "react";
 import { cx, toneClass, type Tone } from "./utils";
+
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 
@@ -301,6 +305,55 @@ export interface ModalProps {
 }
 
 export function Modal({ actions, children, onClose, open, title }: ModalProps) {
+  const panelRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!open) {
+      return undefined;
+    }
+    const previous =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+    panelRef.current?.focus();
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab") {
+        return;
+      }
+      const panel = panelRef.current;
+      if (!panel) {
+        return;
+      }
+      const focusable = Array.from(
+        panel.querySelectorAll<HTMLElement>(FOCUSABLE),
+      );
+      if (focusable.length === 0) {
+        event.preventDefault();
+        panel.focus();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      if (event.shiftKey && (active === first || active === panel)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      previous?.focus();
+    };
+  }, [onClose, open]);
+
   if (!open) {
     return null;
   }
@@ -308,7 +361,13 @@ export function Modal({ actions, children, onClose, open, title }: ModalProps) {
   return (
     <div className="m-modal" role="presentation">
       <div className="m-modal__backdrop" onClick={onClose} />
-      <section aria-modal="true" className="m-modal__panel" role="dialog">
+      <section
+        aria-modal="true"
+        className="m-modal__panel"
+        ref={panelRef}
+        role="dialog"
+        tabIndex={-1}
+      >
         <header className="m-modal__header">
           <h2>{title}</h2>
           <Button aria-label="Close modal" onClick={onClose} variant="ghost">
