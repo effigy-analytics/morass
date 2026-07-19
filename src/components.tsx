@@ -4,6 +4,7 @@ import type {
   ButtonHTMLAttributes,
   HTMLAttributes,
   InputHTMLAttributes,
+  KeyboardEvent as ReactKeyboardEvent,
   LabelHTMLAttributes,
   ReactNode,
   SelectHTMLAttributes,
@@ -250,9 +251,37 @@ export function Tabs<TValue extends string>({
   tabs,
   value,
 }: TabsProps<TValue>) {
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const activeIndex = Math.max(
+    0,
+    tabs.findIndex((tab) => tab.value === value),
+  );
+
+  const select = (index: number) => {
+    tabRefs.current[index]?.focus();
+    onValueChange(tabs[index].value);
+  };
+
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+    let target: number | null = null;
+    if (event.key === "ArrowRight") {
+      target = (activeIndex + 1) % tabs.length;
+    } else if (event.key === "ArrowLeft") {
+      target = (activeIndex - 1 + tabs.length) % tabs.length;
+    } else if (event.key === "Home") {
+      target = 0;
+    } else if (event.key === "End") {
+      target = tabs.length - 1;
+    }
+    if (target !== null) {
+      event.preventDefault();
+      select(target);
+    }
+  };
+
   return (
     <div aria-label={ariaLabel} className="m-tabs" role="tablist">
-      {tabs.map((tab) => (
+      {tabs.map((tab, index) => (
         <button
           aria-selected={tab.value === value}
           className={cx(
@@ -261,7 +290,12 @@ export function Tabs<TValue extends string>({
           )}
           key={tab.value}
           onClick={() => onValueChange(tab.value)}
+          onKeyDown={handleKeyDown}
+          ref={(element) => {
+            tabRefs.current[index] = element;
+          }}
           role="tab"
+          tabIndex={tab.value === value ? 0 : -1}
           type="button"
         >
           {tab.label}

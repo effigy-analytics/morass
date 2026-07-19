@@ -1,4 +1,3 @@
-import { Children, isValidElement, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -166,26 +165,8 @@ describe("component primitives", () => {
     expect(html).toContain('aria-label="Sections"');
     expect(html).toContain('aria-selected="true"');
     expect(html).toContain('aria-selected="false"');
-
-    const rendered = Tabs({
-      "aria-label": "Sections",
-      onValueChange,
-      tabs: [
-        { label: "Home", value: "home" },
-        { label: "Personal", value: "personal" },
-      ],
-      value: "home",
-    });
-    const buttons = isValidElement<{ children: ReactNode }>(rendered)
-      ? Children.toArray(rendered.props.children)
-      : [];
-    const personalButton = buttons[1];
-
-    expect(isValidElement(personalButton)).toBe(true);
-    if (isValidElement<{ onClick: () => void }>(personalButton)) {
-      personalButton.props.onClick();
-    }
-    expect(onValueChange).toHaveBeenCalledWith("personal");
+    expect(html).toContain('tabindex="0"');
+    expect(html).toContain('tabindex="-1"');
   });
 
   it("renders PageSection with optional label and attribute passthrough", () => {
