@@ -91,7 +91,7 @@ const result = validateTheme({
 // result.ok === false
 // result.failures[0] →
 // { fg: "--m-color-on-primary", bg: ["--m-color-primary"],
-//   ratio: 2.41, required: 4.5, context: "primary Button label" }
+//   ratio: 2.39, required: 4.5, context: "primary Button label" }
 ```
 
 To validate the theme a page actually renders (after your own CSS), pull
