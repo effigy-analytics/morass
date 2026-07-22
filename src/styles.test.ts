@@ -70,6 +70,22 @@ describe("styles.css invariants", () => {
     expect(auto).not.toBeNull();
     expect(declarationsOf(auto ?? "")).toEqual(declarationsOf(dark ?? ""));
   });
+
+  it("declares the material-structure tokens in :root", () => {
+    const root = recordOf(blockOf(css, ":root") ?? "");
+    for (const t of [
+      "--m-grid-line",
+      "--m-grid-margin",
+      "--m-tape",
+      "--m-stitch",
+      "--m-paper-shadow",
+      "--m-postit-bg",
+      "--m-postit-on",
+      "--m-postit-shadow",
+    ]) {
+      expect(root[t]).toBeDefined();
+    }
+  });
 });
 
 export function recordOf(block: string): Record<string, string> {
@@ -94,5 +110,24 @@ describe("themes.ts stays in sync with styles.css", () => {
     expect(recordOf(blockOf(css, '[data-m-theme="dark"]') ?? "")).toEqual(
       themes.dark,
     );
+  });
+});
+
+describe("surface treatments", () => {
+  it("defines the surface treatments using only tokens", () => {
+    for (const sel of [".m-canvas-grid", ".m-paper", ".m-postit"]) {
+      expect(css.includes(`${sel} {`)).toBe(true);
+    }
+    // canvas-grid must be opt-in: body must not carry the grid
+    const body = blockOf(css, "body") ?? "";
+    expect(body.includes("repeating-linear-gradient")).toBe(false);
+  });
+});
+
+describe("control treatments", () => {
+  it("defines the control treatments (felt + stitch) using only tokens", () => {
+    for (const sel of [".m-felt {", ".m-felt--sage {", ".m-stitch {"]) {
+      expect(css.includes(sel)).toBe(true);
+    }
   });
 });

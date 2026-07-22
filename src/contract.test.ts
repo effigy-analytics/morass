@@ -132,6 +132,23 @@ describe("validateTheme", () => {
     ).toThrow("--m-color-primary");
     expect(performance.now() - start).toBeLessThan(1000);
   });
+
+  it("keeps the warm-paper light theme AA-clean", () => {
+    const result = validateTheme(themes.light);
+    expect(result.ok).toBe(true);
+  });
+});
+
+it("guarantees AA on every felt fill in light and dark", () => {
+  for (const theme of [themes.light, themes.dark]) {
+    const felts = REQUIRED_PAIRS.filter((p) => p.context.startsWith("felt "));
+    expect(felts.length).toBe(5);
+    const result = validateTheme(theme);
+    const feltFailures = result.failures.filter((f) =>
+      f.context.startsWith("felt "),
+    );
+    expect(feltFailures).toEqual([]);
+  }
 });
 
 describe("built-in themes satisfy the contract", () => {
