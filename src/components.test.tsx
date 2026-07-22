@@ -87,6 +87,23 @@ describe("component primitives", () => {
     expect(withoutFooter).not.toContain("m-card__footer");
   });
 
+  it("renders Card subtitle and flushes body padding with noPadding", () => {
+    const withExtras = renderToStaticMarkup(
+      <Card noPadding subtitle="Under the title" title="Report">
+        Body
+      </Card>,
+    );
+    expect(withExtras).toContain(
+      '<p class="m-card__subtitle">Under the title</p>',
+    );
+    expect(withExtras).toContain('class="m-card__body m-card__body--flush"');
+
+    const plain = renderToStaticMarkup(<Card title="Report">Body</Card>);
+    expect(plain).not.toContain("m-card__subtitle");
+    expect(plain).toContain('class="m-card__body"');
+    expect(plain).not.toContain("m-card__body--flush");
+  });
+
   it("lays AppFrame out single-column unless a sidebar is provided", () => {
     const withSidebar = renderToStaticMarkup(
       <AppFrame sidebar={<span>Nav</span>}>Content</AppFrame>,

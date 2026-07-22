@@ -65,6 +65,10 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   actions?: ReactNode;
   eyebrow?: ReactNode;
   footer?: ReactNode;
+  /** Remove the body's internal padding (for flush content like tables). */
+  noPadding?: boolean;
+  /** Descriptive text shown under the title. */
+  subtitle?: ReactNode;
   title?: ReactNode;
 }
 
@@ -74,21 +78,28 @@ export function Card({
   className,
   eyebrow,
   footer,
+  noPadding,
+  subtitle,
   title,
   ...props
 }: CardProps) {
   return (
     <section className={cx("m-card", className)} {...props}>
-      {eyebrow || title || actions ? (
+      {eyebrow || title || subtitle || actions ? (
         <header className="m-card__header">
           <div>
             {eyebrow ? <p className="m-eyebrow">{eyebrow}</p> : null}
             {title ? <h2 className="m-card__title">{title}</h2> : null}
+            {subtitle ? <p className="m-card__subtitle">{subtitle}</p> : null}
           </div>
           {actions ? <div className="m-card__actions">{actions}</div> : null}
         </header>
       ) : null}
-      {children ? <div className="m-card__body">{children}</div> : null}
+      {children ? (
+        <div className={cx("m-card__body", noPadding && "m-card__body--flush")}>
+          {children}
+        </div>
+      ) : null}
       {footer ? <footer className="m-card__footer">{footer}</footer> : null}
     </section>
   );

@@ -2,6 +2,10 @@
 
 All notable Morass changes should be recorded here before publishing a package version.
 
+## 0.5.1
+
+- `Card` gains `subtitle` (descriptive text under the title) and `noPadding` (flush body for tables/embeds), closing the last API gaps versus `@effigy-analytics/effigy-ui`'s `Card` so consumers migrate by import swap.
+
 ## 0.5.0
 
 - **Visual redesign — craft materialism.** The palette moves from the teal/professional set to a warm pastel "craft" system (paper, graph paper, felt, tape, post-it). This restyles every consumer surface; pin your own theme tokens if you need the old look.

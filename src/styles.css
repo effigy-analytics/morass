@@ -296,6 +296,12 @@
     margin: 0;
   }
 
+  .m-card__subtitle {
+    color: var(--m-color-text-muted);
+    font-size: 0.86rem;
+    margin: 4px 0 0;
+  }
+
   .m-card__actions {
     align-items: center;
     display: flex;
@@ -305,6 +311,10 @@
 
   .m-card__body {
     padding: 16px 18px;
+  }
+
+  .m-card__body--flush {
+    padding: 0;
   }
 
   .m-card__footer {
