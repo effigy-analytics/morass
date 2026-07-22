@@ -9,6 +9,7 @@ import {
   Hero,
   Metric,
   Modal,
+  NotFound,
   PageHeader,
   PageSection,
   ProgressSteps,
@@ -259,5 +260,28 @@ describe("component primitives", () => {
     expect(openHtml).toContain('aria-modal="true"');
     expect(openHtml).toContain("Quick add");
     expect(closedHtml).toBe("");
+  });
+
+  it("renders NotFound with defaults and a fallback home link", () => {
+    const html = renderToStaticMarkup(<NotFound />);
+    expect(html).toContain('class="m-not-found"');
+    expect(html).toContain('role="status"');
+    expect(html).toContain('class="m-not-found__heading">Page Not Found</h1>');
+    expect(html).toContain("exist or has been moved"); // apostrophe is escaped in static markup — match a clean substring
+    expect(html).toContain('class="m-not-found__home" href="/"');
+  });
+
+  it("renders NotFound with custom heading, message, and action", () => {
+    const html = renderToStaticMarkup(
+      <NotFound
+        action={<a href="/back">Go back</a>}
+        heading="Gone"
+        message="Missing."
+      />,
+    );
+    expect(html).toContain(">Gone</h1>");
+    expect(html).toContain("Missing.");
+    expect(html).toContain("Go back");
+    expect(html).not.toContain('class="m-not-found__home"');
   });
 });

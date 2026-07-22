@@ -729,4 +729,33 @@
   .m-empty-state__action {
     margin-top: 6px;
   }
+
+  .m-not-found {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 72px 24px;
+    text-align: center;
+  }
+
+  .m-not-found__heading {
+    font-size: 1.8rem;
+    margin: 0;
+  }
+
+  .m-not-found__message {
+    color: var(--m-color-text-muted);
+    margin: 0;
+    max-width: 48ch;
+  }
+
+  .m-not-found__action {
+    margin-top: 10px;
+  }
+
+  .m-not-found__home {
+    color: var(--m-color-primary);
+    font-weight: 700;
+  }
 }

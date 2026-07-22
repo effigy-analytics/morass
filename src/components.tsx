@@ -211,6 +211,32 @@ export function EmptyState({
   );
 }
 
+export interface NotFoundProps {
+  action?: ReactNode;
+  heading?: string;
+  message?: string;
+}
+
+export function NotFound({
+  action,
+  heading = "Page Not Found",
+  message = "The page you're looking for doesn't exist or has been moved.",
+}: NotFoundProps) {
+  return (
+    <div className="m-not-found" role="status">
+      <h1 className="m-not-found__heading">{heading}</h1>
+      <p className="m-not-found__message">{message}</p>
+      <div className="m-not-found__action">
+        {action ?? (
+          <a className="m-not-found__home" href="/">
+            Return home
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export interface PageSectionProps extends HTMLAttributes<HTMLElement> {
   label?: ReactNode;
 }
