@@ -10,8 +10,8 @@ export type MorassTheme = Record<MorassTokenName, string>;
  */
 export const themes: { light: MorassTheme; dark: MorassTheme } = {
   light: {
-    "--m-color-bg": "#f7f4ef",
-    "--m-color-surface": "#ffffff",
+    "--m-color-bg": "#f7f2e7",
+    "--m-color-surface": "#fffdf7",
     "--m-color-surface-muted": "#f0f7f4",
     "--m-color-text": "#1d2524",
     "--m-color-text-muted": "#5f6d6a",

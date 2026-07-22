@@ -132,6 +132,11 @@ describe("validateTheme", () => {
     ).toThrow("--m-color-primary");
     expect(performance.now() - start).toBeLessThan(1000);
   });
+
+  it("keeps the warm-paper light theme AA-clean", () => {
+    const result = validateTheme(themes.light);
+    expect(result.ok).toBe(true);
+  });
 });
 
 describe("built-in themes satisfy the contract", () => {
