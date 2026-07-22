@@ -137,6 +137,11 @@ export const REQUIRED_PAIRS: readonly RequiredPair[] = [
     context: "AppFrame sidebar nav text",
     fg: "--m-color-sidebar-text",
   },
+  { bg: ["--m-felt-sage"], context: "felt sage label", fg: "--m-felt-sage-on" },
+  { bg: ["--m-felt-butter"], context: "felt butter label", fg: "--m-felt-butter-on" },
+  { bg: ["--m-felt-rose"], context: "felt rose label", fg: "--m-felt-rose-on" },
+  { bg: ["--m-felt-sky"], context: "felt sky label", fg: "--m-felt-sky-on" },
+  { bg: ["--m-felt-lavender"], context: "felt lavender label", fg: "--m-felt-lavender-on" },
 ];
 
 type Rgba = [number, number, number, number];

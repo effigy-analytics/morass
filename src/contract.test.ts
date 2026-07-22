@@ -139,6 +139,20 @@ describe("validateTheme", () => {
   });
 });
 
+it("guarantees AA on every felt fill in light and dark", () => {
+  for (const theme of [themes.light, themes.dark]) {
+    const felts = REQUIRED_PAIRS.filter((p) =>
+      p.context.startsWith("felt "),
+    );
+    expect(felts.length).toBe(5);
+    const result = validateTheme(theme);
+    const feltFailures = result.failures.filter((f) =>
+      f.context.startsWith("felt "),
+    );
+    expect(feltFailures).toEqual([]);
+  }
+});
+
 describe("built-in themes satisfy the contract", () => {
   it.each(["light", "dark"] as const)("%s theme validates clean", (name) => {
     const result = validateTheme(themes[name]);
