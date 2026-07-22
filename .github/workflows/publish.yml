@@ -3,104 +3,120 @@ name: Publish
 on:
   release:
     types: [published]
-  workflow_dispatch:
 
 permissions: {}
 
 jobs:
-  publish-github:
-    name: Publish to GitHub Packages
+  publish:
+    name: Publish one verified artifact
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      id-token: write # npm trusted publishing (OIDC)
       packages: write
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: .nvmrc
-          registry-url: https://npm.pkg.github.com
+          package-manager-cache: false
+          registry-url: https://registry.npmjs.org
           scope: "@effigy-analytics"
+
+      - name: Pin and verify release toolchain
+        run: |
+          npm install -g npm@12.0.1
+          test "$(node --version)" = "v24.15.0"
+          test "$(npm --version)" = "12.0.1"
 
       - run: npm ci
       - run: npm run check
 
-      # project .npmrc points the scope at public npmjs for consumers and
-      # outranks both setup-node's registry-url and publishConfig.registry;
-      # this job must pin the scope to GH Packages for view + publish
+      - name: Verify release provenance
+        run: |
+          npm run integrity:check -- "$GITHUB_REF_NAME"
+          test "$(git rev-list -n 1 "$GITHUB_REF_NAME")" = "$(git rev-parse HEAD)"
+          git merge-base --is-ancestor HEAD origin/main
+
+      - name: Pack the canonical artifact once
+        run: |
+          npm pkg set "gitHead=$GITHUB_SHA"
+          test "$(node -p "require('./package.json').gitHead")" = "$GITHUB_SHA"
+          mkdir release-artifact
+          TARBALL="$(npm pack --pack-destination release-artifact)"
+          test -f "release-artifact/$TARBALL"
+          echo "MORASS_TARBALL=release-artifact/$TARBALL" >> "$GITHUB_ENV"
+
+      - name: Verify exact artifact with React 18
+        run: npm run install:check -- "$GITHUB_WORKSPACE/$MORASS_TARBALL"
+        env:
+          MORASS_REACT_VERSION: 18.2.0
+          MORASS_REACT_TYPES_VERSION: 18.2.0
+          MORASS_REACT_DOM_TYPES_VERSION: 18.2.0
+
+      - name: Verify exact artifact with React 19
+        run: npm run install:check -- "$GITHUB_WORKSPACE/$MORASS_TARBALL"
+        env:
+          MORASS_REACT_VERSION: 19.2.7
+          MORASS_REACT_TYPES_VERSION: 19.2.17
+          MORASS_REACT_DOM_TYPES_VERSION: 19.2.3
+
+      - name: Publish or verify npmjs artifact
+        run: |
+          set +e
+          node scripts/verify-registry-artifact.mjs \
+            https://registry.npmjs.org "$MORASS_TARBALL" "$GITHUB_SHA"
+          STATUS=$?
+          set -e
+          if [ "$STATUS" -eq 3 ]; then
+            npm publish "$MORASS_TARBALL" --access public --provenance \
+              --registry=https://registry.npmjs.org
+          elif [ "$STATUS" -ne 0 ]; then
+            exit "$STATUS"
+          fi
+          node scripts/verify-registry-artifact.mjs \
+            https://registry.npmjs.org "$MORASS_TARBALL" "$GITHUB_SHA" --wait
+
+      - name: Verify anonymous npmjs install and exports
+        run: |
+          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+          npm run install:check -- "@effigy-analytics/morass@${PACKAGE_VERSION}"
+
+      - name: Configure GitHub Packages authentication
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+          registry-url: https://npm.pkg.github.com
+          scope: "@effigy-analytics"
+
+      - name: Re-pin and verify mirror toolchain
+        run: |
+          npm install -g npm@12.0.1
+          test "$(node --version)" = "v24.15.0"
+          test "$(npm --version)" = "12.0.1"
+
       - name: Pin scope registry to GitHub Packages
         run: |
           echo "@effigy-analytics:registry=https://npm.pkg.github.com" > .npmrc
           test "$(npm config get @effigy-analytics:registry)" = "https://npm.pkg.github.com"
 
-      - name: Verify release tag matches package version
-        if: github.event_name == 'release'
-        run: |
-          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
-          test "$GITHUB_REF_NAME" = "v${PACKAGE_VERSION}"
-
-      - name: Check if version already on GitHub Packages
-        id: exists
+      - name: Publish or verify byte-identical GitHub Packages mirror
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
-          if npm view "@effigy-analytics/morass@${PACKAGE_VERSION}" version >/dev/null 2>&1; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
+          set +e
+          node scripts/verify-registry-artifact.mjs \
+            https://npm.pkg.github.com "$MORASS_TARBALL" "$GITHUB_SHA"
+          STATUS=$?
+          set -e
+          if [ "$STATUS" -eq 3 ]; then
+            npm publish "$MORASS_TARBALL" --registry=https://npm.pkg.github.com
+          elif [ "$STATUS" -ne 0 ]; then
+            exit "$STATUS"
           fi
-
-      - name: Publish
-        if: steps.exists.outputs.exists == 'false'
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  publish-npmjs:
-    name: Publish to npmjs.com
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write # npm trusted publishing (OIDC)
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version-file: .nvmrc
-          registry-url: https://registry.npmjs.org
-          scope: "@effigy-analytics"
-
-      - name: Ensure npm supports trusted publishing
-        run: npm install -g npm@latest && npm --version
-
-      - run: npm ci
-      - run: npm run check
-
-      - name: Verify release tag matches package version
-        if: github.event_name == 'release'
-        run: |
-          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
-          test "$GITHUB_REF_NAME" = "v${PACKAGE_VERSION}"
-
-      - name: Check if version already on npmjs
-        id: exists
-        run: |
-          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
-          if npm view "@effigy-analytics/morass@${PACKAGE_VERSION}" version \
-            --registry=https://registry.npmjs.org >/dev/null 2>&1; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Publish (trusted publishing — no token)
-        if: steps.exists.outputs.exists == 'false'
-        run: |
-          npm pkg delete publishConfig
-          # project .npmrc outranks setup-node's registry-url; assert the
-          # scope resolves to npmjs or publish silently targets GH Packages
-          test "$(npm config get @effigy-analytics:registry)" = "https://registry.npmjs.org"
-          npm publish --access public
+          node scripts/verify-registry-artifact.mjs \
+            https://npm.pkg.github.com "$MORASS_TARBALL" "$GITHUB_SHA" --wait

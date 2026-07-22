@@ -7,31 +7,35 @@ Morass is the standard UI package for the Effigy Analytics suite. It was born in
 ## Status
 
 - TypeScript React package, MIT licensed
-- Vite library build
-- CSS token system
-- Accessible primitives for shell, cards, controls, tabs, modals, progress, and status
-- CI-ready lint, typecheck, test, and build scripts
+- ESM and CommonJS library builds with typed exports
+- CSS token, light/dark theme, and contrast-validation system
+- Tested field, tab, modal, keyboard, focus, and reduced-motion behavior, with structural checks for forced-color fallbacks
+- CI gates for formatting, lint, types, tests, build, package integrity, and consumer installation
 
 ## Installation
 
-The package is published to the public npm registry — no authentication or registry configuration needed:
+Public npmjs is the canonical registry. Installation requires no account, token, or private registry configuration:
 
 ```bash
 npm install @effigy-analytics/morass
 ```
 
-It is also mirrored to GitHub Packages. Unlike npmjs, GitHub Packages requires authentication even for public packages; only use it if your project already points the `@effigy-analytics` scope there, and provide a token with `read:packages`:
+If an existing project points the entire `@effigy-analytics` scope at GitHub Packages, remove that override or explicitly restore npmjs before installing Morass:
 
 ```
-@effigy-analytics:registry=https://npm.pkg.github.com
+@effigy-analytics:registry=https://registry.npmjs.org
 ```
+
+npm registry selection is scope-wide. If the same project still consumes private GitHub-only packages under `@effigy-analytics`, do not blindly replace the mapping: plan a registry/lockfile transition or move those packages to a distinct scope first.
+
+The canonical hosted showcase is [effigy-analytics.com/morass](https://effigy-analytics.com/morass). It is a versioned consumer and can lag an unreleased package change; its displayed version is the source of truth for what the hosted page is exercising.
 
 ## Development
 
 ```bash
-npm install
+npm ci
 npm run check
-npm run build
+npm run install:check
 ```
 
 ## Public API
@@ -41,11 +45,27 @@ import { AppFrame, Button, Card, StatusPill } from "@effigy-analytics/morass";
 import "@effigy-analytics/morass/styles.css";
 ```
 
-Primitives: `AppFrame`, `Button`, `ButtonLink`, `Card`, `TextField`, `SelectField`, `StatusPill`, `Metric`, `Tabs`, `ProgressSteps`, `Modal`, `Hero`, `PageSection`, plus shared tone/utility helpers.
+Primitives: `AppFrame`, `ShellLayout`, `Button`, `ButtonLink`, `Card`, `Hero`, `PageHeader`, `PageSection`, `EmptyState`, `NotFound`, `TextField`, `SelectField`, `StatusPill`, `Metric`, `Tabs`, `ProgressSteps`, and `Modal`, plus theme, contrast, material, tone, and class-name helpers.
+
+`Tabs` requires one of two honest semantic modes. Use `mode="tabs"` with active content to render a linked tablist and tabpanel; use `mode="selection"` without children for filter-like selection buttons:
+
+```tsx
+<Tabs
+  aria-label="Report sections"
+  mode="tabs"
+  tabs={tabs}
+  value={section}
+  onValueChange={setSection}
+>
+  <ReportSection section={section} />
+</Tabs>
+```
+
+See the [public contract](docs/public-contract.md) for component caveats, supported CSS surfaces, accessibility boundaries, and runtime compatibility.
 
 ### Theming
 
-All colors flow through `--m-*` custom properties. The stylesheet is wrapped in `@layer morass`, so unlayered application CSS — including token overrides — always wins, regardless of stylesheet import order.
+All normal-theme colors flow through `--m-*` custom properties. Forced-colors rules intentionally use operating-system color keywords such as `Highlight` and `ButtonText`. The stylesheet is wrapped in `@layer morass`, so unlayered application CSS — including token overrides — always wins, regardless of stylesheet import order.
 
 A theme is a token set. Morass ships two:
 
@@ -71,12 +91,11 @@ The full token list lives at the top of `styles.css`.
 
 ### Theme contract
 
-morass's design contracts are machine-enforced, not documented. `@layer`
-guarantees your overrides win; the contrast contract guarantees your
-theme stays readable. Every fg/bg pair the components render as text is
-listed in `REQUIRED_PAIRS`, and `validateTheme` checks any theme against
-it at WCAG AA (4.5:1), compositing translucent backgrounds the way the
-browser does.
+Morass's design contracts are documented and machine-enforced. `@layer`
+guarantees your unlayered overrides win. `REQUIRED_PAIRS` covers component
+text at WCAG AA 4.5:1 and the form-control boundary and focus indicator at
+WCAG non-text contrast 3:1, including sidebar and Modal-backdrop focus contexts. `validateTheme` composites translucent
+backgrounds the way the browser does.
 
 Validate a remapped theme in your own CI:
 
@@ -109,9 +128,8 @@ validateTheme(theme);
 ```
 
 `validateTheme` throws if a contract token is missing, unparseable, or
-out of range — a typo'd token must not pass as vacuously valid. Borders and focus rings
-are not in contract v1 (they're a divider aesthetic, not text); see the
-0.4.0 design doc for the rationale.
+out of range—a mistyped token must not pass vacuously. Decorative dividers
+remain outside the contrast contract; control boundaries and focus rings do not.
 
 ### Subpath: reminders
 
@@ -126,6 +144,15 @@ import {
 
 Moved out of the root export in 0.2.0.
 
+## Compatibility and migration
+
+Morass supports browser-DOM React applications using React and React DOM 18.2 or 19. The JavaScript build targets ES2022; supported browsers must also provide CSS custom properties, CSS Cascade Layers, and the documented media-query behavior. React Native, legacy browsers, React Server Components, and exact historical browser-version floors are not currently claimed.
+
+- [Public contract](docs/public-contract.md)
+- [Migrating 0.4–0.6 consumers to the 0.7 baseline](docs/migrations/0.7.md)
+- [GitHub issues](https://github.com/effigy-analytics/morass/issues) for support and defects
+- [Private security report](https://github.com/effigy-analytics/morass/security/advisories/new) for vulnerabilities
+
 ## Release Boundary
 
 Morass is consumed by Effigy Analytics products (Webbery today, the platform apps as they adopt it) as a versioned package. Treat these surfaces as public within a published version:
@@ -133,7 +160,7 @@ Morass is consumed by Effigy Analytics products (Webbery today, the platform app
 - exports from `@effigy-analytics/morass`
 - exports from `@effigy-analytics/morass/reminders`
 - `@effigy-analytics/morass/styles.css`
-- CSS custom properties intended for application theming
+- the documented `--m-*` tokens and material utility classes
 - component semantics and required peer dependency ranges
 
 Breaking changes require a coordinated consumer update and a major version or explicit release note (pre-1.0, breaking changes ride minor versions and are called out in release notes). Consumers should pin Morass to a published version instead of depending on a live sibling checkout.
@@ -144,10 +171,12 @@ Before publishing:
 npm run check
 ```
 
-`npm run check` includes `npm pack --dry-run` after the library build, so CI
-verifies the publishable package contents before a release. Then publish through
-the GitHub Actions `Publish` workflow from a GitHub release whose tag matches
-`v<package.json version>`.
+`npm run check` verifies version and export integrity and includes
+`npm pack --dry-run` after the library build. CI also installs and typechecks the packed artifact
+without credentials against React 18 and 19. Publication runs only from a GitHub
+release tag matching `v<package.json version>` on canonical `main`; one tarball is
+published to npmjs, verified by integrity and commit, anonymously installed, and then
+mirrored byte-for-byte to GitHub Packages.
 
 ## License
 

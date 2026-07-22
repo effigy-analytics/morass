@@ -2,6 +2,13 @@
 
 All notable Morass changes should be recorded here before publishing a package version.
 
+## 0.7.0
+
+- Reconciles package, lockfile, changelog, tag, and registry controls around public npmjs as the canonical release source. Release CI packs once, verifies registry integrity and commit provenance, rejects untagged or non-main release commits, and verifies tokenless consumer installs.
+- Associates field help and errors with their controls, names Modal dialogs from their visible headings, and gives `Tabs` explicit `tabs` and `selection` modes. This changes documented component semantics and internal field DOM structure, so the baseline advances as a pre-1 minor rather than a patch.
+- Enforces 3:1 focus-indicator and form-control-boundary contrast across page, surface, input, sidebar, and Modal-backdrop contexts; fully pins nested light themes; and adds forced-colors, reduced-motion, and native light/dark color-scheme behavior.
+- Documents the supported React, browser, component, theme, token, CSS, accessibility, and migration contracts for the 0.7 baseline.
+
 ## 0.6.0
 
 - New **`ShellLayout`** — the opinionated Effigy app shell: a materialist header (brand, environment felt-pill, primary nav, right-aligned actions) over `AppFrame`. Apps pass their own router links via the `nav` slot; the environment pill hides for `prod`/unset. This is the standard "how Effigy sites are structured" surface, replacing effigy-ui's `ShellLayout`.
@@ -12,8 +19,8 @@ All notable Morass changes should be recorded here before publishing a package v
 
 ## 0.5.0
 
-- **Visual redesign — craft materialism.** The palette moves from the teal/professional set to a warm pastel "craft" system (paper, graph paper, felt, tape, post-it). This restyles every consumer surface; pin your own theme tokens if you need the old look.
-- **`material = role` design contract.** New `MaterialRole` type + `MATERIAL_TREATMENTS` map: graph paper = canvas, cut paper + tape = content, felt + stitching = controls/status.
+- **Visual foundation — craft materialism.** The default palette moves from the teal/professional set to a warm pastel "craft" system (paper, graph paper, felt, tape, post-it), and opt-in material treatments become available. This changes token-backed consumer surfaces; full automatic material-to-role component restyling and named theme families remain future work.
+- **`material = role` vocabulary.** New `MaterialRole` type + `MATERIAL_TREATMENTS` map: graph paper = canvas, cut paper + tape = content, felt + stitching = controls/status.
 - **Pastel felt palette.** New `--m-felt-{sage,butter,rose,sky,lavender}` fills, each with a paired `-on` ink token, added to every theme and to the `REQUIRED_PAIRS` contrast contract (WCAG AA in both light and dark, ≥5.74:1).
 - **Material treatment utilities** (CSS-only, token-driven, inside `@layer morass`): `.m-canvas-grid` (opt-in graph-paper backdrop), `.m-paper` / `.m-paper--taped`, `.m-postit` (reduced-motion aware), `.m-felt` (+ swatch modifiers), `.m-stitch`.
 - **Warm-paper canvas + material-structure tokens** (`--m-grid-line`, `--m-tape`, `--m-stitch`, `--m-paper-shadow`, post-it tokens, …).

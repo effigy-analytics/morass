@@ -2,9 +2,93 @@
 import { cleanup, fireEvent, render } from "@testing-library/react";
 import { useState } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { Modal, Tabs } from "./components";
+import { Modal, SelectField, Tabs, TextField } from "./components";
 
 afterEach(cleanup);
+
+describe("Field accessibility", () => {
+  it("associates help and errors while preserving caller descriptions", () => {
+    const view = render(
+      <>
+        <span id="account-context">Used for receipts.</span>
+        <TextField
+          aria-describedby="account-context"
+          error="Required"
+          helpText="Use your work address."
+          id="account-email"
+          label="Email"
+        />
+      </>,
+    );
+    const input = view.getByRole("textbox", { name: "Email" });
+    const descriptions = input.getAttribute("aria-describedby")?.split(" ");
+
+    expect(descriptions).toHaveLength(3);
+    expect(descriptions?.[0]).toBe("account-context");
+    expect(document.getElementById(descriptions?.[1] ?? "")?.textContent).toBe(
+      "Use your work address.",
+    );
+    expect(document.getElementById(descriptions?.[2] ?? "")?.textContent).toBe(
+      "Required",
+    );
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+  });
+
+  it("labels selects and leaves valid fields unmarked", () => {
+    const view = render(
+      <SelectField
+        helpText="Choose one."
+        label="Frequency"
+        defaultValue="monthly"
+      >
+        <option value="monthly">Monthly</option>
+      </SelectField>,
+    );
+    const select = view.getByRole("combobox", { name: "Frequency" });
+    const description = select.getAttribute("aria-describedby");
+
+    expect(document.getElementById(description ?? "")?.textContent).toBe(
+      "Choose one.",
+    );
+    expect(select.hasAttribute("aria-invalid")).toBe(false);
+  });
+
+  it("generates unique control and description identifiers", () => {
+    const view = render(
+      <>
+        <TextField helpText="First help" label="First" />
+        <TextField helpText="Second help" label="Second" />
+      </>,
+    );
+    const first = view.getByRole("textbox", { name: "First" });
+    const second = view.getByRole("textbox", { name: "Second" });
+
+    expect(first.id).not.toBe(second.id);
+    expect(first.getAttribute("aria-describedby")).not.toBe(
+      second.getAttribute("aria-describedby"),
+    );
+  });
+
+  it("uses labelProps.htmlFor as the control id unless id is explicit", () => {
+    const view = render(
+      <>
+        <TextField label="Alias" labelProps={{ htmlFor: "alias" }} />
+        <SelectField
+          id="explicit-frequency"
+          label="Frequency"
+          labelProps={{ htmlFor: "ignored-frequency" }}
+        >
+          <option>Monthly</option>
+        </SelectField>
+      </>,
+    );
+
+    expect(view.getByRole("textbox", { name: "Alias" }).id).toBe("alias");
+    expect(view.getByRole("combobox", { name: "Frequency" }).id).toBe(
+      "explicit-frequency",
+    );
+  });
+});
 
 function renderModal(onClose = vi.fn()) {
   const view = render(
@@ -24,8 +108,13 @@ describe("Modal keyboard behavior", () => {
   });
 
   it("focuses the panel on open", () => {
-    renderModal();
-    expect(document.activeElement?.getAttribute("role")).toBe("dialog");
+    const { view } = renderModal();
+    const dialog = view.getByRole("dialog", { name: "Focus test" });
+    expect(document.activeElement).toBe(dialog);
+    expect(
+      document.getElementById(dialog.getAttribute("aria-labelledby") ?? "")
+        ?.textContent,
+    ).toBe("Focus test");
   });
 
   it("wraps Tab from the last focusable to the first", () => {
@@ -129,6 +218,7 @@ function TabsHarness() {
   return (
     <Tabs
       aria-label="Demo"
+      mode="tabs"
       onValueChange={setValue}
       tabs={[
         { label: "A", value: "a" },
@@ -136,7 +226,9 @@ function TabsHarness() {
         { label: "C", value: "c" },
       ]}
       value={value}
-    />
+    >
+      <p>{`Panel ${value.toUpperCase()}`}</p>
+    </Tabs>
   );
 }
 
@@ -151,20 +243,27 @@ describe("Tabs keyboard behavior", () => {
     const view = render(
       <Tabs
         aria-label="Demo"
+        mode="tabs"
         onValueChange={vi.fn()}
         tabs={[
           { label: "A", value: "a" },
           { label: "B", value: "b" },
         ]}
         value="missing"
-      />,
+      >
+        Missing panel
+      </Tabs>,
     );
     const tabs = view.getAllByRole("tab");
     expect(tabs.map((tab) => tab.tabIndex)).toEqual([0, -1]);
     expect(tabs.map((tab) => tab.getAttribute("aria-selected"))).toEqual([
-      "false",
+      "true",
       "false",
     ]);
+    const panel = view.getByRole("tabpanel", { name: "A" });
+    expect(
+      tabs.every((tab) => tab.getAttribute("aria-controls") === panel.id),
+    ).toBe(true);
   });
 
   it("moves selection right with wrapping and focuses the new tab", () => {
@@ -212,5 +311,60 @@ describe("Tabs keyboard behavior", () => {
     expect(view.getAllByRole("tab")[1].getAttribute("aria-selected")).toBe(
       "true",
     );
+  });
+
+  it("connects tabs and the active panel in both directions", () => {
+    const view = render(<TabsHarness />);
+    const tabs = view.getAllByRole("tab");
+    const panel = view.getByRole("tabpanel", { name: "A" });
+
+    expect(
+      tabs.every((tab) => tab.getAttribute("aria-controls") === panel.id),
+    ).toBe(true);
+    expect(panel.getAttribute("aria-labelledby")).toBe(tabs[0].id);
+
+    fireEvent.keyDown(tabs[0], { key: "ArrowRight" });
+    expect(view.getByRole("tabpanel", { name: "B" }).textContent).toContain(
+      "Panel B",
+    );
+  });
+
+  it("uses selection-group semantics when no panel is supplied", () => {
+    const view = render(
+      <Tabs
+        aria-label="Filters"
+        mode="selection"
+        onValueChange={vi.fn()}
+        tabs={[
+          { label: "All", value: "all" },
+          { label: "Open", value: "open" },
+        ]}
+        value="all"
+      />,
+    );
+    const group = view.getByRole("group", { name: "Filters" });
+    const buttons = Array.from(group.querySelectorAll("button"));
+
+    expect(
+      buttons.map((button) => button.getAttribute("aria-pressed")),
+    ).toEqual(["true", "false"]);
+    expect(view.queryByRole("tabpanel")).toBeNull();
+  });
+
+  it("renders no dangling relationships for an empty tab interface", () => {
+    const view = render(
+      <Tabs
+        aria-label="Empty"
+        mode="tabs"
+        onValueChange={vi.fn()}
+        tabs={[]}
+        value="missing"
+      >
+        Nothing selected
+      </Tabs>,
+    );
+
+    expect(view.queryByRole("tab")).toBeNull();
+    expect(view.queryByRole("tabpanel")).toBeNull();
   });
 });

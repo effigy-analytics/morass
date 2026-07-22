@@ -8,10 +8,11 @@ const currentDir = dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [react()],
   build: {
+    target: "es2022",
     lib: {
       cssFileName: "styles",
       entry: {
-        morass: resolve(currentDir, "src/index.ts"),
+        morass: resolve(currentDir, "src/bundle.ts"),
         reminders: resolve(currentDir, "src/reminders.ts"),
       },
       name: "Morass",

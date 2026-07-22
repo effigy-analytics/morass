@@ -1,4 +1,4 @@
-import type { Tone } from "./utils";
+import type { Tone } from "./utils.js";
 
 export type DueState = "overdue" | "due-soon" | "on-track" | "done";
 

@@ -1,4 +1,4 @@
-import type { MorassTheme, MorassTokenName } from "./themes";
+import type { MorassTheme, MorassTokenName } from "./themes.js";
 
 export interface RequiredPair {
   /** Compositing chain, topmost first; the last entry must be opaque. */
@@ -6,6 +6,8 @@ export interface RequiredPair {
   /** Where this combination renders. */
   context: string;
   fg: MorassTokenName;
+  /** Required contrast ratio. Text defaults to 4.5; non-text pairs use 3. */
+  required?: number;
 }
 
 export interface PairFailure {
@@ -21,15 +23,13 @@ export interface ValidationResult {
   ok: boolean;
 }
 
-const REQUIRED = 4.5;
+const DEFAULT_REQUIRED = 4.5;
 
 /**
  * The contrast contract: every fg/bg combination the components render as
- * text, at WCAG AA 4.5:1 (uniform — no large-text carve-out). Borders and
- * focus rings are deliberately out of contract v1: the built-in soft
- * borders are a divider aesthetic, and bringing WCAG 1.4.11 non-text
- * contrast into the contract would force a palette change on every
- * consumer. See docs/superpowers/specs/2026-07-19-morass-0.4.0-design.md.
+ * text at WCAG AA 4.5:1 (uniform — no large-text carve-out), plus the
+ * programmatically significant control boundary and focus indicator at
+ * WCAG non-text contrast 3:1. Decorative dividers remain out of contract.
  */
 export const REQUIRED_PAIRS: readonly RequiredPair[] = [
   {
@@ -51,6 +51,42 @@ export const REQUIRED_PAIRS: readonly RequiredPair[] = [
     bg: ["--m-color-input-bg"],
     context: "TextField/SelectField input text",
     fg: "--m-color-text",
+  },
+  {
+    bg: ["--m-color-input-bg"],
+    context: "TextField/SelectField control boundary",
+    fg: "--m-color-text-muted",
+    required: 3,
+  },
+  {
+    bg: ["--m-color-bg"],
+    context: "focus indicator on page bg",
+    fg: "--m-focus-ring",
+    required: 3,
+  },
+  {
+    bg: ["--m-color-surface"],
+    context: "focus indicator on surface",
+    fg: "--m-focus-ring",
+    required: 3,
+  },
+  {
+    bg: ["--m-color-input-bg"],
+    context: "focus indicator on input",
+    fg: "--m-focus-ring",
+    required: 3,
+  },
+  {
+    bg: ["--m-color-sidebar-bg"],
+    context: "focus indicator in AppFrame sidebar",
+    fg: "--m-color-sidebar-text",
+    required: 3,
+  },
+  {
+    bg: ["--m-color-backdrop", "--m-color-bg"],
+    context: "Modal panel focus indicator over backdrop",
+    fg: "--m-focus-ring-on-backdrop",
+    required: 3,
   },
   {
     bg: ["--m-color-header-bg", "--m-color-bg"],
@@ -254,6 +290,7 @@ function contrastRatio(
 export function validateTheme(theme: MorassTheme): ValidationResult {
   const failures: PairFailure[] = [];
   for (const pair of REQUIRED_PAIRS) {
+    const required = pair.required ?? DEFAULT_REQUIRED;
     let base = tokenColor(theme, pair.bg[pair.bg.length - 1]).slice(0, 3) as [
       number,
       number,
@@ -264,13 +301,13 @@ export function validateTheme(theme: MorassTheme): ValidationResult {
     }
     const fg = over(tokenColor(theme, pair.fg), base);
     const ratio = contrastRatio(fg, base);
-    if (ratio < REQUIRED) {
+    if (ratio < required) {
       failures.push({
         bg: [...pair.bg],
         context: pair.context,
         fg: pair.fg,
         ratio: Math.round(ratio * 100) / 100,
-        required: REQUIRED,
+        required,
       });
     }
   }

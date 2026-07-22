@@ -1,4 +1,4 @@
-import { useEffect, useInsertionEffect, useRef } from "react";
+import { useEffect, useId, useInsertionEffect, useRef } from "react";
 import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
@@ -6,13 +6,23 @@ import type {
   InputHTMLAttributes,
   KeyboardEvent as ReactKeyboardEvent,
   LabelHTMLAttributes,
+  ReactElement,
   ReactNode,
   SelectHTMLAttributes,
 } from "react";
-import { cx, toneClass, type Tone } from "./utils";
+import { cx, toneClass, type Tone } from "./utils.js";
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+function mergeAriaIds(
+  ...values: Array<string | undefined>
+): string | undefined {
+  const ids = values.flatMap(
+    (value) => value?.split(/\s+/).filter(Boolean) ?? [],
+  );
+  return ids.length > 0 ? [...new Set(ids)].join(" ") : undefined;
+}
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 
@@ -28,7 +38,7 @@ export function Button({
   type = "button",
   variant = "secondary",
   ...props
-}: ButtonProps) {
+}: ButtonProps): ReactElement {
   return (
     <button
       className={cx("m-button", `m-button--${variant}`, className)}
@@ -52,7 +62,7 @@ export function ButtonLink({
   icon,
   variant = "secondary",
   ...props
-}: ButtonLinkProps) {
+}: ButtonLinkProps): ReactElement {
   return (
     <a className={cx("m-button", `m-button--${variant}`, className)} {...props}>
       {icon ? <span className="m-button__icon">{icon}</span> : null}
@@ -82,7 +92,7 @@ export function Card({
   subtitle,
   title,
   ...props
-}: CardProps) {
+}: CardProps): ReactElement {
   return (
     <section className={cx("m-card", className)} {...props}>
       {eyebrow || title || subtitle || actions ? (
@@ -112,7 +122,12 @@ export interface AppFrameProps {
   sidebar?: ReactNode;
 }
 
-export function AppFrame({ children, header, nav, sidebar }: AppFrameProps) {
+export function AppFrame({
+  children,
+  header,
+  nav,
+  sidebar,
+}: AppFrameProps): ReactElement {
   return (
     <div
       className={cx("m-app-frame", Boolean(sidebar) && "m-app-frame--sidebar")}
@@ -156,7 +171,7 @@ export function ShellLayout({
   children,
   environment,
   nav,
-}: ShellLayoutProps) {
+}: ShellLayoutProps): ReactElement {
   const showEnvironment =
     environment !== undefined && !HIDDEN_ENVIRONMENTS.has(environment);
   const header = (
@@ -189,7 +204,7 @@ export function Hero({
   lede,
   title,
   ...props
-}: HeroProps) {
+}: HeroProps): ReactElement {
   return (
     <section className={cx("m-hero", className)} {...props}>
       {eyebrow ? <p className="m-eyebrow">{eyebrow}</p> : null}
@@ -218,7 +233,7 @@ export function PageHeader({
   subtitle,
   title,
   ...props
-}: PageHeaderProps) {
+}: PageHeaderProps): ReactElement {
   return (
     <header className={cx("m-page-header", className)} {...props}>
       <div className="m-page-header__main">
@@ -252,7 +267,7 @@ export function EmptyState({
   icon,
   title,
   ...props
-}: EmptyStateProps) {
+}: EmptyStateProps): ReactElement {
   return (
     <div className={cx("m-empty-state", "m-paper", className)} {...props}>
       {icon ? <div className="m-empty-state__icon">{icon}</div> : null}
@@ -275,7 +290,7 @@ export function NotFound({
   action,
   heading = "Page Not Found",
   message = "The page you're looking for doesn't exist or has been moved.",
-}: NotFoundProps) {
+}: NotFoundProps): ReactElement {
   return (
     <div className="m-not-found" role="status">
       <h1 className="m-not-found__heading">{heading}</h1>
@@ -300,7 +315,7 @@ export function PageSection({
   className,
   label,
   ...props
-}: PageSectionProps) {
+}: PageSectionProps): ReactElement {
   return (
     <section className={cx("m-page-section", className)} {...props}>
       {label ? <p className="m-eyebrow">{label}</p> : null}
@@ -325,14 +340,43 @@ export function TextField({
   label,
   labelProps,
   ...props
-}: TextFieldProps) {
+}: TextFieldProps): ReactElement {
+  const generatedId = useId();
+  const controlId = props.id ?? labelProps?.htmlFor ?? `m-field-${generatedId}`;
+  const helpId = helpText ? `${controlId}-help` : undefined;
+  const errorId = error ? `${controlId}-error` : undefined;
+
   return (
-    <label className="m-field" {...labelProps}>
-      <span className="m-field__label">{label}</span>
-      <input className="m-input" {...props} />
-      {helpText ? <span className="m-field__help">{helpText}</span> : null}
-      {error ? <span className="m-field__error">{error}</span> : null}
-    </label>
+    <div className="m-field">
+      <label
+        {...labelProps}
+        className={cx("m-field__label", labelProps?.className)}
+        htmlFor={controlId}
+      >
+        {label}
+      </label>
+      <input
+        {...props}
+        aria-describedby={mergeAriaIds(
+          props["aria-describedby"],
+          helpId,
+          errorId,
+        )}
+        aria-invalid={error ? true : props["aria-invalid"]}
+        className={cx("m-input", props.className)}
+        id={controlId}
+      />
+      {helpText ? (
+        <span className="m-field__help" id={helpId}>
+          {helpText}
+        </span>
+      ) : null}
+      {error ? (
+        <span className="m-field__error" id={errorId}>
+          {error}
+        </span>
+      ) : null}
+    </div>
   );
 }
 
@@ -346,16 +390,45 @@ export function SelectField({
   label,
   labelProps,
   ...props
-}: SelectFieldProps) {
+}: SelectFieldProps): ReactElement {
+  const generatedId = useId();
+  const controlId = props.id ?? labelProps?.htmlFor ?? `m-field-${generatedId}`;
+  const helpId = helpText ? `${controlId}-help` : undefined;
+  const errorId = error ? `${controlId}-error` : undefined;
+
   return (
-    <label className="m-field" {...labelProps}>
-      <span className="m-field__label">{label}</span>
-      <select className="m-input m-input--select" {...props}>
+    <div className="m-field">
+      <label
+        {...labelProps}
+        className={cx("m-field__label", labelProps?.className)}
+        htmlFor={controlId}
+      >
+        {label}
+      </label>
+      <select
+        {...props}
+        aria-describedby={mergeAriaIds(
+          props["aria-describedby"],
+          helpId,
+          errorId,
+        )}
+        aria-invalid={error ? true : props["aria-invalid"]}
+        className={cx("m-input", "m-input--select", props.className)}
+        id={controlId}
+      >
         {children}
       </select>
-      {helpText ? <span className="m-field__help">{helpText}</span> : null}
-      {error ? <span className="m-field__error">{error}</span> : null}
-    </label>
+      {helpText ? (
+        <span className="m-field__help" id={helpId}>
+          {helpText}
+        </span>
+      ) : null}
+      {error ? (
+        <span className="m-field__error" id={errorId}>
+          {error}
+        </span>
+      ) : null}
+    </div>
   );
 }
 
@@ -364,7 +437,10 @@ export interface StatusPillProps {
   tone?: Tone;
 }
 
-export function StatusPill({ children, tone = "neutral" }: StatusPillProps) {
+export function StatusPill({
+  children,
+  tone = "neutral",
+}: StatusPillProps): ReactElement {
   return <span className={toneClass("m-status-pill", tone)}>{children}</span>;
 }
 
@@ -373,7 +449,7 @@ export interface MetricProps {
   value: ReactNode;
 }
 
-export function Metric({ label, value }: MetricProps) {
+export function Metric({ label, value }: MetricProps): ReactElement {
   return (
     <div className="m-metric">
       <dt>{label}</dt>
@@ -382,24 +458,43 @@ export function Metric({ label, value }: MetricProps) {
   );
 }
 
-export interface TabsProps<TValue extends string> {
+interface TabsBaseProps<TValue extends string> {
   "aria-label": string;
   onValueChange: (value: TValue) => void;
   tabs: Array<{ label: ReactNode; value: TValue }>;
   value: TValue;
 }
 
+export type TabsProps<TValue extends string> = TabsBaseProps<TValue> &
+  (
+    | {
+        /** A linked tablist and active tabpanel. */
+        children: ReactNode;
+        mode: "tabs";
+      }
+    | {
+        /** Filter-like selection buttons that control consumer-owned content. */
+        children?: never;
+        mode: "selection";
+      }
+  );
+
 export function Tabs<TValue extends string>({
   "aria-label": ariaLabel,
+  children,
+  mode,
   onValueChange,
   tabs,
   value,
-}: TabsProps<TValue>) {
+}: TabsProps<TValue>): ReactElement {
+  const generatedId = useId();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const activeIndex = Math.max(
-    0,
-    tabs.findIndex((tab) => tab.value === value),
-  );
+  const selectedIndex = tabs.findIndex((tab) => tab.value === value);
+  const activeIndex =
+    selectedIndex >= 0 ? selectedIndex : tabs.length > 0 ? 0 : -1;
+  const hasPanel = mode === "tabs";
+  const panelId = `m-tabs-${generatedId}-panel`;
+  const tabId = (index: number) => `m-tabs-${generatedId}-tab-${index}`;
 
   const select = (index: number) => {
     tabRefs.current[index]?.focus();
@@ -407,6 +502,9 @@ export function Tabs<TValue extends string>({
   };
 
   const handleKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+    if (tabs.length === 0) {
+      return;
+    }
     let target: number | null = null;
     if (event.key === "ArrowRight") {
       target = (activeIndex + 1) % tabs.length;
@@ -424,28 +522,50 @@ export function Tabs<TValue extends string>({
   };
 
   return (
-    <div aria-label={ariaLabel} className="m-tabs" role="tablist">
-      {tabs.map((tab, index) => (
-        <button
-          aria-selected={tab.value === value}
-          className={cx(
-            "m-tabs__tab",
-            tab.value === value && "m-tabs__tab--active",
-          )}
-          key={tab.value}
-          onClick={() => onValueChange(tab.value)}
-          onKeyDown={handleKeyDown}
-          ref={(element) => {
-            tabRefs.current[index] = element;
-          }}
-          role="tab"
-          tabIndex={index === activeIndex ? 0 : -1}
-          type="button"
+    <>
+      <div
+        aria-label={ariaLabel}
+        className="m-tabs"
+        role={hasPanel ? "tablist" : "group"}
+      >
+        {tabs.map((tab, index) => {
+          const isActive = hasPanel
+            ? index === activeIndex
+            : tab.value === value;
+          return (
+            <button
+              aria-controls={hasPanel && activeIndex >= 0 ? panelId : undefined}
+              aria-pressed={hasPanel ? undefined : isActive}
+              aria-selected={hasPanel ? isActive : undefined}
+              className={cx("m-tabs__tab", isActive && "m-tabs__tab--active")}
+              id={hasPanel ? tabId(index) : undefined}
+              key={tab.value}
+              onClick={() => onValueChange(tab.value)}
+              onKeyDown={handleKeyDown}
+              ref={(element) => {
+                tabRefs.current[index] = element;
+              }}
+              role={hasPanel ? "tab" : undefined}
+              tabIndex={index === activeIndex ? 0 : -1}
+              type="button"
+            >
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
+      {hasPanel && activeIndex >= 0 ? (
+        <div
+          aria-labelledby={tabId(activeIndex)}
+          className="m-tabs__panel"
+          id={panelId}
+          role="tabpanel"
+          tabIndex={0}
         >
-          {tab.label}
-        </button>
-      ))}
-    </div>
+          {children}
+        </div>
+      ) : null}
+    </>
   );
 }
 
@@ -454,7 +574,10 @@ export interface ProgressStepsProps {
   steps: string[];
 }
 
-export function ProgressSteps({ current, steps }: ProgressStepsProps) {
+export function ProgressSteps({
+  current,
+  steps,
+}: ProgressStepsProps): ReactElement {
   return (
     <ol className="m-progress" aria-label="Progress">
       {steps.map((step, index) => (
@@ -482,7 +605,14 @@ export interface ModalProps {
   title: ReactNode;
 }
 
-export function Modal({ actions, children, onClose, open, title }: ModalProps) {
+export function Modal({
+  actions,
+  children,
+  onClose,
+  open,
+  title,
+}: ModalProps): ReactElement | null {
+  const titleId = `m-modal-title-${useId()}`;
   const panelRef = useRef<HTMLElement>(null);
   const onCloseRef = useRef(onClose);
   // Insertion effect, not passive: it flushes synchronously during commit,
@@ -553,6 +683,7 @@ export function Modal({ actions, children, onClose, open, title }: ModalProps) {
     <div className="m-modal" role="presentation">
       <div className="m-modal__backdrop" onClick={onClose} />
       <section
+        aria-labelledby={titleId}
         aria-modal="true"
         className="m-modal__panel"
         ref={panelRef}
@@ -560,7 +691,7 @@ export function Modal({ actions, children, onClose, open, title }: ModalProps) {
         tabIndex={-1}
       >
         <header className="m-modal__header">
-          <h2>{title}</h2>
+          <h2 id={titleId}>{title}</h2>
           <Button aria-label="Close modal" onClick={onClose} variant="ghost">
             Close
           </Button>

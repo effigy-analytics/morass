@@ -20,3 +20,39 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm audit --audit-level=high
+
+  consumer-compatibility:
+    name: Consumer / React ${{ matrix.react }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - react: "18.2.0"
+            react_types: "18.2.0"
+            react_dom_types: "18.2.0"
+          - react: "19.2.7"
+            react_types: "19.2.17"
+            react_dom_types: "19.2.3"
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run install:check
+        env:
+          MORASS_REACT_VERSION: ${{ matrix.react }}
+          MORASS_REACT_TYPES_VERSION: ${{ matrix.react_types }}
+          MORASS_REACT_DOM_TYPES_VERSION: ${{ matrix.react_dom_types }}
+
+  consumer-compatibility-gate:
+    name: Consumer compatibility gate
+    if: always()
+    needs: consumer-compatibility
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every consumer matrix job
+        run: test "${{ needs.consumer-compatibility.result }}" = "success"

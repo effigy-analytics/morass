@@ -25,7 +25,64 @@
     --m-color-input-bg: #ffffff;
     --m-color-header-bg: rgb(255 255 255 / 0.92);
     --m-color-backdrop: rgb(15 23 42 / 0.44);
-    --m-focus-ring: rgb(29 118 111 / 0.25);
+    --m-focus-ring: #1d766f;
+    --m-focus-ring-on-backdrop: #ffffff;
+    --m-shadow-modal: 0 24px 80px rgb(15 23 42 / 0.24);
+    --m-felt-sage: #c9ddcb;
+    --m-felt-sage-on: #2f5741;
+    --m-felt-butter: #f6e6a6;
+    --m-felt-butter-on: #5f4e12;
+    --m-felt-rose: #efc9c6;
+    --m-felt-rose-on: #7a2f2a;
+    --m-felt-sky: #c4dbe6;
+    --m-felt-sky-on: #234b5c;
+    --m-felt-lavender: #d8cde9;
+    --m-felt-lavender-on: #453363;
+    --m-radius: 8px;
+    --m-shadow: 0 16px 40px rgb(29 37 36 / 0.08);
+    --m-font:
+      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    --m-grid-line: #e9ebdf;
+    --m-grid-margin: #f0b6ad;
+    --m-tape: rgb(196 219 230 / 0.62);
+    --m-stitch: #5c8168;
+    --m-paper-shadow: 3px 6px 16px rgb(120 105 70 / 0.16);
+    --m-postit-bg: #f6e6a6;
+    --m-postit-on: #5f4e12;
+    --m-postit-shadow: 2px 5px 12px rgb(120 100 40 / 0.25);
+  }
+
+  /* This complete restatement is intentional: explicit light themes must
+     reset every color inherited from a dark ancestor or OS-auto root. */
+  [data-m-theme="light"] {
+    --m-color-bg: #f7f2e7;
+    --m-color-surface: #fffdf7;
+    --m-color-surface-muted: #f0f7f4;
+    --m-color-text: #1d2524;
+    --m-color-text-muted: #5f6d6a;
+    --m-color-border: #d9ded8;
+    --m-color-primary: #1d766f;
+    --m-color-primary-strong: #115c56;
+    --m-color-danger: #b42318;
+    --m-color-danger-bg: #fef3f2;
+    --m-color-warning: #b45309;
+    --m-color-warning-bg: #fff7ed;
+    --m-color-success: #047857;
+    --m-color-success-bg: #ecfdf3;
+    --m-color-info: #1d4ed8;
+    --m-color-info-bg: #eff6ff;
+    --m-color-neutral: #384642;
+    --m-color-neutral-bg: #eef1ef;
+    --m-color-on-primary: #ffffff;
+    --m-color-sidebar-bg: #143330;
+    --m-color-sidebar-text: #f8faf8;
+    --m-color-step-bg: #ebede9;
+    --m-color-input-bg: #ffffff;
+    --m-color-header-bg: rgb(255 255 255 / 0.92);
+    --m-color-backdrop: rgb(15 23 42 / 0.44);
+    --m-focus-ring: #1d766f;
+    --m-focus-ring-on-backdrop: #ffffff;
     --m-shadow-modal: 0 24px 80px rgb(15 23 42 / 0.24);
     --m-felt-sage: #c9ddcb;
     --m-felt-sage-on: #2f5741;
@@ -78,7 +135,8 @@
     --m-color-input-bg: #151d1b;
     --m-color-header-bg: rgb(26 35 33 / 0.92);
     --m-color-backdrop: rgb(0 0 0 / 0.6);
-    --m-focus-ring: rgb(95 192 183 / 0.35);
+    --m-focus-ring: #5fc0b7;
+    --m-focus-ring-on-backdrop: #ffffff;
     --m-felt-sage: #2c4b3c;
     --m-felt-sage-on: #9fe4c0;
     --m-felt-butter: #4a4222;
@@ -130,7 +188,8 @@
       --m-color-input-bg: #151d1b;
       --m-color-header-bg: rgb(26 35 33 / 0.92);
       --m-color-backdrop: rgb(0 0 0 / 0.6);
-      --m-focus-ring: rgb(95 192 183 / 0.35);
+      --m-focus-ring: #5fc0b7;
+      --m-focus-ring-on-backdrop: #ffffff;
       --m-felt-sage: #2c4b3c;
       --m-felt-sage-on: #9fe4c0;
       --m-felt-butter: #4a4222;
@@ -151,6 +210,21 @@
       --m-postit-bg: #4a4222;
       --m-postit-on: #f4dd8f;
       --m-postit-shadow: 2px 5px 14px rgb(0 0 0 / 0.5);
+    }
+  }
+
+  :root,
+  [data-m-theme="light"] {
+    color-scheme: light;
+  }
+
+  [data-m-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-m-theme]) {
+      color-scheme: dark;
     }
   }
 
@@ -180,6 +254,7 @@
     color: var(--m-color-sidebar-text);
     min-height: 100vh;
     padding: 20px 16px;
+    --m-focus-ring: var(--m-color-sidebar-text);
   }
 
   .m-app-frame__main {
@@ -428,7 +503,7 @@
 
   .m-input {
     background: var(--m-color-input-bg);
-    border: 1px solid var(--m-color-border);
+    border: 1px solid var(--m-color-text-muted);
     border-radius: var(--m-radius);
     color: var(--m-color-text);
     font: inherit;
@@ -437,10 +512,16 @@
     width: 100%;
   }
 
-  .m-input:focus,
+  .m-input:focus-visible,
   .m-button:focus-visible,
-  .m-tabs__tab:focus-visible {
+  .m-tabs__tab:focus-visible,
+  .m-tabs__panel:focus-visible {
     outline: 3px solid var(--m-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .m-modal__panel:focus {
+    outline: 3px solid var(--m-focus-ring-on-backdrop);
     outline-offset: 2px;
   }
 
@@ -520,6 +601,10 @@
   .m-tabs__tab--active {
     background: var(--m-color-text);
     color: var(--m-color-on-primary);
+  }
+
+  .m-tabs__panel {
+    margin-top: 12px;
   }
 
   .m-progress {
@@ -673,8 +758,35 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .m-button {
+      transition: none;
+    }
+
     .m-postit {
       transform: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .m-button,
+    .m-input,
+    .m-tabs__tab,
+    .m-modal__panel,
+    .m-status-pill {
+      border: 1px solid ButtonText;
+    }
+
+    .m-tabs__tab--active {
+      background: Highlight;
+      color: HighlightText;
+    }
+
+    .m-input:focus-visible,
+    .m-button:focus-visible,
+    .m-tabs__tab:focus-visible,
+    .m-modal__panel:focus,
+    .m-tabs__panel:focus-visible {
+      outline-color: Highlight;
     }
   }
 

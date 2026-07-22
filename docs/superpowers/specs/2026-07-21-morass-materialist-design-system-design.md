@@ -3,6 +3,8 @@
 **Date:** 2026-07-21
 **Status:** Direction approved (aesthetic + material-semantics mapping validated with Kevin via visual brainstorming, 2026-07-21). This spec defines the design; a phased implementation plan follows via the writing-plans skill.
 
+**0.6 implementation checkpoint:** The token/treatment foundation, parity components, and `ShellLayout` have shipped. Named theme families, automatic material-to-role component restyling/lint, AppFrame link rendering, and other unimplemented sections below remain design direction—not the supported 0.7 contract. See [`docs/public-contract.md`](../../public-contract.md) for the shipped surface.
+
 ## 1. Context & motivation
 
 morass is being elevated from a deliberately narrow "proof-of-craft" kit into **the opinionated, public-facing UI system for all Effigy web properties** — the foundational format for how every Effigy site is structured. It becomes the **spiritual successor to `@effigy-analytics/effigy-ui`**, which enters terminal deprecation: once morass reaches parity and the four remaining consumers (awards, fiscally, steam-sage, declassify) migrate, effigy-ui is archived.

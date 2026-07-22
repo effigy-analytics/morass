@@ -159,6 +159,7 @@ describe("component primitives", () => {
         <TextField
           error="Required"
           helpText="Use the common name."
+          id="item"
           label="Item"
           name="item"
           required
@@ -175,6 +176,8 @@ describe("component primitives", () => {
     expect(html).toContain("required");
     expect(html).toContain('class="m-field__help"');
     expect(html).toContain('class="m-field__error"');
+    expect(html).toContain('aria-describedby="item-help item-error"');
+    expect(html).toContain('aria-invalid="true"');
     expect(html).toContain('class="m-input m-input--select"');
   });
 
@@ -253,13 +256,16 @@ describe("component primitives", () => {
     const element = (
       <Tabs
         aria-label="Sections"
+        mode="tabs"
         onValueChange={() => {}}
         tabs={[
           { label: "Home", value: "home" },
           { label: "Personal", value: "personal" },
         ]}
         value="home"
-      />
+      >
+        <p>Home panel</p>
+      </Tabs>
     );
     const html = renderToStaticMarkup(element);
 
@@ -269,6 +275,9 @@ describe("component primitives", () => {
     expect(html).toContain('aria-selected="false"');
     expect(html).toContain('tabindex="0"');
     expect(html).toContain('tabindex="-1"');
+    expect(html).toContain("aria-controls=");
+    expect(html).toContain('role="tabpanel"');
+    expect(html).toContain("aria-labelledby=");
   });
 
   it("renders PageSection with optional label and attribute passthrough", () => {

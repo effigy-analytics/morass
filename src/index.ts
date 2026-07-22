@@ -1,7 +1,5 @@
-import "./styles.css";
-
-export * from "./components";
-export * from "./utils";
-export * from "./themes";
-export * from "./contract";
-export * from "./materials";
+export * from "./components.js";
+export * from "./utils.js";
+export * from "./themes.js";
+export * from "./contract.js";
+export * from "./materials.js";

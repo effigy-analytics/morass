@@ -137,6 +137,28 @@ describe("validateTheme", () => {
     const result = validateTheme(themes.light);
     expect(result.ok).toBe(true);
   });
+
+  it("enforces 3:1 control-boundary and focus-indicator contrast", () => {
+    const nonTextPairs = REQUIRED_PAIRS.filter((pair) => pair.required === 3);
+    expect(nonTextPairs.length).toBeGreaterThanOrEqual(6);
+    expect(nonTextPairs.map((pair) => pair.context)).toEqual(
+      expect.arrayContaining([
+        "focus indicator in AppFrame sidebar",
+        "Modal panel focus indicator over backdrop",
+      ]),
+    );
+    expect(validateTheme(themes.light).failures).toEqual([]);
+    expect(validateTheme(themes.dark).failures).toEqual([]);
+
+    const result = validateTheme(
+      themeWith({ "--m-focus-ring": "rgb(29 118 111 / 0.25)" }),
+    );
+    const focusFailures = result.failures.filter((failure) =>
+      failure.context.startsWith("focus indicator"),
+    );
+    expect(focusFailures.length).toBeGreaterThan(0);
+    expect(focusFailures.every((failure) => failure.required === 3)).toBe(true);
+  });
 });
 
 it("guarantees AA on every felt fill in light and dark", () => {

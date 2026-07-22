@@ -10,6 +10,7 @@ const css = readFileSync(
 
 const TOKEN_BLOCK_SELECTORS = [
   ":root",
+  '[data-m-theme="light"]',
   '[data-m-theme="dark"]',
   ":root:not([data-m-theme])",
 ];
@@ -71,6 +72,14 @@ describe("styles.css invariants", () => {
     expect(declarationsOf(auto ?? "")).toEqual(declarationsOf(dark ?? ""));
   });
 
+  it("fully resets an explicit light subtree inherited from dark", () => {
+    const root = recordOf(blockOf(css, ":root") ?? "");
+    const explicitLight = recordOf(
+      blockOf(css, '[data-m-theme="light"]') ?? "",
+    );
+    expect(explicitLight).toEqual(root);
+  });
+
   it("declares the material-structure tokens in :root", () => {
     const root = recordOf(blockOf(css, ":root") ?? "");
     for (const t of [
@@ -129,5 +138,31 @@ describe("control treatments", () => {
     for (const sel of [".m-felt {", ".m-felt--sage {", ".m-stitch {"]) {
       expect(css.includes(sel)).toBe(true);
     }
+  });
+
+  it("provides visible focus, forced-color, and reduced-motion fallbacks", () => {
+    const root = recordOf(blockOf(css, ":root") ?? "");
+    expect(root["--m-focus-ring"]).toBe("#1d766f");
+    expect(root["--m-focus-ring-on-backdrop"]).toBe("#ffffff");
+    expect(css).toContain(".m-modal__panel:focus");
+    expect(css).toContain(".m-tabs__panel:focus-visible");
+
+    const forcedColors = blockOf(css, "@media (forced-colors: active)") ?? "";
+    expect(forcedColors).toContain("ButtonText");
+    expect(forcedColors).toContain("Highlight");
+    expect(forcedColors).toContain("HighlightText");
+
+    const reducedMotion =
+      blockOf(css, "@media (prefers-reduced-motion: reduce)") ?? "";
+    expect(reducedMotion).toContain("transition: none");
+    expect(reducedMotion).toContain("transform: none");
+  });
+
+  it("maps native controls to explicit and OS-selected color schemes", () => {
+    expect(css).toContain('[data-m-theme="light"] {\n    color-scheme: light;');
+    expect(css).toContain('[data-m-theme="dark"] {\n    color-scheme: dark;');
+    expect(css).toContain(
+      ":root:not([data-m-theme]) {\n      color-scheme: dark;",
+    );
   });
 });

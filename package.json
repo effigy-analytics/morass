@@ -1,6 +1,6 @@
 {
   "name": "@effigy-analytics/morass",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Composable React UI primitives for durable product interfaces.",
   "type": "module",
   "license": "MIT",
@@ -9,6 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/effigy-analytics/morass.git"
   },
+  "homepage": "https://effigy-analytics.com/morass",
   "sideEffects": [
     "**/*.css"
   ],
@@ -17,11 +18,10 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
+    "docs/migrations/0.7.md",
+    "docs/public-contract.md",
     "README.md"
   ],
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -37,10 +37,11 @@
   },
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run pack:check",
-    "dev": "vite --host 0.0.0.0",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run integrity:check && npm run pack:check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "install:check": "node scripts/verify-install.mjs",
+    "integrity:check": "node scripts/check-release-integrity.mjs",
     "lint": "eslint .",
     "pack:check": "npm_config_cache=${TMPDIR:-/tmp}/morass-npm-cache npm pack --dry-run",
     "test": "vitest run",
