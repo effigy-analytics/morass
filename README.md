@@ -45,7 +45,7 @@ import { AppFrame, Button, Card, StatusPill } from "@effigy-analytics/morass";
 import "@effigy-analytics/morass/styles.css";
 ```
 
-Primitives: `AppFrame`, `ShellLayout`, `Button`, `ButtonLink`, `Card`, `Hero`, `PageHeader`, `PageSection`, `EmptyState`, `NotFound`, `TextField`, `SelectField`, `StatusPill`, `Metric`, `Tabs`, `ProgressSteps`, and `Modal`, plus theme, contrast, material, tone, and class-name helpers.
+Primitives: `AppFrame`, `ShellLayout`, `Button`, `ButtonLink`, `Card`, `Fixture`, `Plaque`, `Medallion`, `Rail`, `Hero`, `PageHeader`, `PageSection`, `EmptyState`, `NotFound`, `TextField`, `SelectField`, `StatusPill`, `Metric`, `Tabs`, `ProgressSteps`, and `Modal`, plus theme, contrast, material, tone, and class-name helpers.
 
 `Tabs` requires one of two honest semantic modes. Use `mode="tabs"` with active content to render a linked tablist and tabpanel; use `mode="selection"` without children for filter-like selection buttons:
 
@@ -151,6 +151,7 @@ Morass supports browser-DOM React applications using React and React DOM 18.2 or
 - [Public contract](docs/public-contract.md)
 - [Applying the Morass 0.7.1 craft material roles](https://github.com/effigy-analytics/morass/blob/main/docs/craft-application-profile.md)
 - [Migrating 0.4–0.6 consumers to the 0.7 baseline](docs/migrations/0.7.md)
+- [Adopting the 0.8 structural material fixtures](docs/migrations/0.8.md)
 - [GitHub issues](https://github.com/effigy-analytics/morass/issues) for support and defects
 - [Private security report](https://github.com/effigy-analytics/morass/security/advisories/new) for vulnerabilities
 

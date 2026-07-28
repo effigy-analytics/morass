@@ -51,6 +51,24 @@
     --m-postit-bg: #f6e6a6;
     --m-postit-on: #5f4e12;
     --m-postit-shadow: 2px 5px 12px rgb(120 100 40 / 0.25);
+    --m-fixture-metal: #806329;
+    --m-fixture-metal-highlight: #e8ce83;
+    --m-fixture-metal-shadow: #443416;
+    --m-fixture-inset: #283431;
+    --m-fixture-inset-on: #f8f2df;
+    --m-fixture-patina: #568078;
+    --m-medallion-gold: #c39a42;
+    --m-medallion-gold-highlight: #f3dda0;
+    --m-medallion-gold-shadow: #4a3512;
+    --m-medallion-gold-on: #211806;
+    --m-medallion-silver: #bdc8c4;
+    --m-medallion-silver-highlight: #f1f5f3;
+    --m-medallion-silver-shadow: #414b48;
+    --m-medallion-silver-on: #17201e;
+    --m-medallion-bronze: #c77a48;
+    --m-medallion-bronze-highlight: #efb183;
+    --m-medallion-bronze-shadow: #4f2c1a;
+    --m-medallion-bronze-on: #26140a;
   }
 
   /* This complete restatement is intentional: explicit light themes must
@@ -107,6 +125,24 @@
     --m-postit-bg: #f6e6a6;
     --m-postit-on: #5f4e12;
     --m-postit-shadow: 2px 5px 12px rgb(120 100 40 / 0.25);
+    --m-fixture-metal: #806329;
+    --m-fixture-metal-highlight: #e8ce83;
+    --m-fixture-metal-shadow: #443416;
+    --m-fixture-inset: #283431;
+    --m-fixture-inset-on: #f8f2df;
+    --m-fixture-patina: #568078;
+    --m-medallion-gold: #c39a42;
+    --m-medallion-gold-highlight: #f3dda0;
+    --m-medallion-gold-shadow: #4a3512;
+    --m-medallion-gold-on: #211806;
+    --m-medallion-silver: #bdc8c4;
+    --m-medallion-silver-highlight: #f1f5f3;
+    --m-medallion-silver-shadow: #414b48;
+    --m-medallion-silver-on: #17201e;
+    --m-medallion-bronze: #c77a48;
+    --m-medallion-bronze-highlight: #efb183;
+    --m-medallion-bronze-shadow: #4f2c1a;
+    --m-medallion-bronze-on: #26140a;
   }
 
   [data-m-theme="dark"] {
@@ -157,6 +193,24 @@
     --m-postit-bg: #4a4222;
     --m-postit-on: #f4dd8f;
     --m-postit-shadow: 2px 5px 14px rgb(0 0 0 / 0.5);
+    --m-fixture-metal: #725c2c;
+    --m-fixture-metal-highlight: #c9ac62;
+    --m-fixture-metal-shadow: #211a0c;
+    --m-fixture-inset: #0f1715;
+    --m-fixture-inset-on: #f4ead0;
+    --m-fixture-patina: #527f76;
+    --m-medallion-gold: #c39a42;
+    --m-medallion-gold-highlight: #f3dda0;
+    --m-medallion-gold-shadow: #4a3512;
+    --m-medallion-gold-on: #211806;
+    --m-medallion-silver: #bdc8c4;
+    --m-medallion-silver-highlight: #f1f5f3;
+    --m-medallion-silver-shadow: #414b48;
+    --m-medallion-silver-on: #17201e;
+    --m-medallion-bronze: #c77a48;
+    --m-medallion-bronze-highlight: #efb183;
+    --m-medallion-bronze-shadow: #4f2c1a;
+    --m-medallion-bronze-on: #26140a;
   }
 
   /* Auto block: keep identical to [data-m-theme="dark"] above — enforced
@@ -210,6 +264,24 @@
       --m-postit-bg: #4a4222;
       --m-postit-on: #f4dd8f;
       --m-postit-shadow: 2px 5px 14px rgb(0 0 0 / 0.5);
+      --m-fixture-metal: #725c2c;
+      --m-fixture-metal-highlight: #c9ac62;
+      --m-fixture-metal-shadow: #211a0c;
+      --m-fixture-inset: #0f1715;
+      --m-fixture-inset-on: #f4ead0;
+      --m-fixture-patina: #527f76;
+      --m-medallion-gold: #c39a42;
+      --m-medallion-gold-highlight: #f3dda0;
+      --m-medallion-gold-shadow: #4a3512;
+      --m-medallion-gold-on: #211806;
+      --m-medallion-silver: #bdc8c4;
+      --m-medallion-silver-highlight: #f1f5f3;
+      --m-medallion-silver-shadow: #414b48;
+      --m-medallion-silver-on: #17201e;
+      --m-medallion-bronze: #c77a48;
+      --m-medallion-bronze-highlight: #efb183;
+      --m-medallion-bronze-shadow: #4f2c1a;
+      --m-medallion-bronze-on: #26140a;
     }
   }
 
@@ -395,6 +467,236 @@
   .m-card__footer {
     border-top: 1px solid var(--m-color-border);
     padding: 12px 18px;
+  }
+
+  .m-fixture {
+    background:
+      radial-gradient(
+        circle at 12px 12px,
+        var(--m-fixture-metal-highlight) 0 2px,
+        var(--m-fixture-metal-shadow) 2.5px 4px,
+        transparent 4.5px
+      ),
+      radial-gradient(
+        circle at calc(100% - 12px) 12px,
+        var(--m-fixture-metal-highlight) 0 2px,
+        var(--m-fixture-metal-shadow) 2.5px 4px,
+        transparent 4.5px
+      ),
+      radial-gradient(
+        circle at 12px calc(100% - 12px),
+        var(--m-fixture-metal-highlight) 0 2px,
+        var(--m-fixture-metal-shadow) 2.5px 4px,
+        transparent 4.5px
+      ),
+      radial-gradient(
+        circle at calc(100% - 12px) calc(100% - 12px),
+        var(--m-fixture-metal-highlight) 0 2px,
+        var(--m-fixture-metal-shadow) 2.5px 4px,
+        transparent 4.5px
+      ),
+      linear-gradient(
+        145deg,
+        var(--m-fixture-metal-highlight),
+        var(--m-fixture-metal) 28%,
+        var(--m-fixture-metal-shadow) 52%,
+        var(--m-fixture-metal) 74%,
+        var(--m-fixture-metal-highlight)
+      );
+    border: 1px solid var(--m-fixture-metal-shadow);
+    border-radius: calc(var(--m-radius) * 2);
+    box-shadow:
+      inset 0 1px 0 var(--m-fixture-metal-highlight),
+      inset 0 -2px 0 var(--m-fixture-metal-shadow),
+      var(--m-shadow);
+    min-width: 0;
+    padding: var(--m-fixture-edge, 12px);
+    position: relative;
+  }
+
+  .m-fixture__surface {
+    background: var(--m-color-surface);
+    border: 1px solid var(--m-fixture-metal-shadow);
+    border-radius: calc(var(--m-radius) + 2px);
+    box-shadow:
+      inset 0 0 0 2px var(--m-fixture-patina),
+      inset 0 0 0 3px var(--m-fixture-metal-shadow);
+    min-width: 0;
+    padding: var(--m-fixture-padding, clamp(18px, 4vw, 40px));
+    position: relative;
+  }
+
+  .m-fixture__trim {
+    display: flex;
+    justify-content: center;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+
+  .m-fixture__trim > * {
+    pointer-events: auto;
+  }
+
+  .m-plaque {
+    align-items: center;
+    background: linear-gradient(
+      105deg,
+      var(--m-fixture-metal-shadow),
+      var(--m-fixture-inset) 18% 82%,
+      var(--m-fixture-metal-shadow)
+    );
+    border: 1px solid var(--m-fixture-metal-highlight);
+    border-radius: calc(var(--m-radius) / 2);
+    box-shadow:
+      inset 0 0 0 1px var(--m-fixture-metal-shadow),
+      0 2px 0 var(--m-fixture-metal-shadow);
+    color: var(--m-fixture-inset-on);
+    display: inline-flex;
+    font-size: 0.72rem;
+    font-weight: 800;
+    gap: 8px;
+    justify-content: center;
+    letter-spacing: 0.12em;
+    line-height: 1.2;
+    min-height: 30px;
+    padding: 6px 14px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .m-medallion {
+    --m-medallion-face: var(--m-medallion-gold);
+    --m-medallion-highlight: var(--m-medallion-gold-highlight);
+    --m-medallion-shadow: var(--m-medallion-gold-shadow);
+    --m-medallion-on: var(--m-medallion-gold-on);
+    align-items: center;
+    aspect-ratio: 1;
+    background:
+      radial-gradient(
+        circle at 34% 28%,
+        var(--m-medallion-highlight) 0 7%,
+        transparent 8%
+      ),
+      radial-gradient(
+        circle,
+        var(--m-medallion-highlight),
+        var(--m-medallion-face) 58%,
+        var(--m-medallion-shadow) 60% 64%,
+        var(--m-medallion-face) 66% 76%,
+        var(--m-medallion-highlight) 78% 82%,
+        var(--m-medallion-shadow) 84%
+      );
+    border: 1px solid var(--m-medallion-shadow);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 0 2px var(--m-medallion-highlight),
+      inset 0 0 0 4px var(--m-medallion-shadow),
+      0 5px 12px color-mix(in srgb, var(--m-medallion-shadow) 34%, transparent);
+    color: var(--m-medallion-on);
+    display: inline-grid;
+    flex: 0 0 auto;
+    font-weight: 900;
+    height: var(--m-medallion-size, 64px);
+    isolation: isolate;
+    line-height: 1;
+    place-items: center;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .m-medallion__face {
+    align-items: center;
+    display: grid;
+    justify-items: center;
+    max-width: 72%;
+  }
+
+  .m-medallion--gold {
+    --m-medallion-face: var(--m-medallion-gold);
+    --m-medallion-highlight: var(--m-medallion-gold-highlight);
+    --m-medallion-shadow: var(--m-medallion-gold-shadow);
+    --m-medallion-on: var(--m-medallion-gold-on);
+  }
+
+  .m-medallion--silver {
+    --m-medallion-face: var(--m-medallion-silver);
+    --m-medallion-highlight: var(--m-medallion-silver-highlight);
+    --m-medallion-shadow: var(--m-medallion-silver-shadow);
+    --m-medallion-on: var(--m-medallion-silver-on);
+  }
+
+  .m-medallion--bronze {
+    --m-medallion-face: var(--m-medallion-bronze);
+    --m-medallion-highlight: var(--m-medallion-bronze-highlight);
+    --m-medallion-shadow: var(--m-medallion-bronze-shadow);
+    --m-medallion-on: var(--m-medallion-bronze-on);
+  }
+
+  .m-medallion--xs {
+    --m-medallion-size: 24px;
+    font-size: 0.68rem;
+  }
+
+  .m-medallion--sm {
+    --m-medallion-size: 40px;
+    font-size: 1rem;
+  }
+
+  .m-medallion--md {
+    --m-medallion-size: 64px;
+    font-size: 1.5rem;
+  }
+
+  .m-medallion--lg {
+    --m-medallion-size: 96px;
+    font-size: 2rem;
+  }
+
+  .m-rail {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .m-rail::before,
+  .m-rail::after {
+    background:
+      radial-gradient(
+        circle at 4px 50%,
+        var(--m-fixture-metal-highlight) 0 2px,
+        transparent 2.5px
+      ),
+      linear-gradient(
+        to bottom,
+        var(--m-fixture-metal-highlight),
+        var(--m-fixture-metal) 45%,
+        var(--m-fixture-metal-shadow) 55%,
+        var(--m-fixture-metal)
+      );
+    border: 1px solid var(--m-fixture-metal-shadow);
+    border-radius: 999px;
+    box-shadow: 0 1px 0 var(--m-fixture-metal-highlight);
+    content: "";
+    flex: 1 1 auto;
+    height: 7px;
+    min-width: 18px;
+  }
+
+  .m-rail__label {
+    color: var(--m-color-text-muted);
+    flex: 0 1 auto;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    min-width: 0;
+    text-align: center;
+    text-transform: uppercase;
   }
 
   .m-eyebrow {
@@ -772,8 +1074,25 @@
     .m-input,
     .m-tabs__tab,
     .m-modal__panel,
-    .m-status-pill {
+    .m-status-pill,
+    .m-fixture,
+    .m-fixture__surface,
+    .m-medallion,
+    .m-plaque,
+    .m-rail::before,
+    .m-rail::after {
       border: 1px solid ButtonText;
+    }
+
+    .m-fixture,
+    .m-fixture__surface,
+    .m-medallion,
+    .m-plaque,
+    .m-rail::before,
+    .m-rail::after {
+      background: Canvas;
+      box-shadow: none;
+      color: CanvasText;
     }
 
     .m-tabs__tab--active {

@@ -6,13 +6,17 @@ import {
   ButtonLink,
   Card,
   EmptyState,
+  Fixture,
   Hero,
+  Medallion,
   Metric,
   Modal,
   NotFound,
   PageHeader,
   PageSection,
+  Plaque,
   ProgressSteps,
+  Rail,
   SelectField,
   ShellLayout,
   StatusPill,
@@ -86,6 +90,39 @@ describe("component primitives", () => {
     expect(withFooter).toContain('class="m-card__footer"');
     expect(withFooter).toContain("Read more");
     expect(withoutFooter).not.toContain("m-card__footer");
+  });
+
+  it("renders material fixtures with optional trim and joined rails", () => {
+    const framed = renderToStaticMarkup(
+      <Fixture aria-label="Ceremony" trim={<Plaque>Live ballot</Plaque>}>
+        <Rail label={<h2>Featured categories</h2>} />
+        <p>Ballot content</p>
+      </Fixture>,
+    );
+    const decorativeRail = renderToStaticMarkup(<Rail />);
+
+    expect(framed).toContain('class="m-fixture"');
+    expect(framed).toContain('aria-label="Ceremony"');
+    expect(framed).toContain('class="m-fixture__trim"');
+    expect(framed).toContain('class="m-fixture__surface"');
+    expect(framed).toContain('class="m-plaque"');
+    expect(framed).toContain('class="m-rail"');
+    expect(framed).toContain("<h2>Featured categories</h2>");
+    expect(decorativeRail).toContain('aria-hidden="true"');
+  });
+
+  it("renders a tokenized medallion with finish, size, and consumer labeling", () => {
+    const html = renderToStaticMarkup(
+      <Medallion aria-label="First place" finish="gold" size="sm">
+        1
+      </Medallion>,
+    );
+
+    expect(html).toContain(
+      'class="m-medallion m-medallion--gold m-medallion--sm"',
+    );
+    expect(html).toContain('aria-label="First place"');
+    expect(html).toContain('class="m-medallion__face">1</span>');
   });
 
   it("renders Card subtitle and flushes body padding with noPadding", () => {

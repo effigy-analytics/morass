@@ -91,6 +91,24 @@ describe("styles.css invariants", () => {
       "--m-postit-bg",
       "--m-postit-on",
       "--m-postit-shadow",
+      "--m-fixture-metal",
+      "--m-fixture-metal-highlight",
+      "--m-fixture-metal-shadow",
+      "--m-fixture-inset",
+      "--m-fixture-inset-on",
+      "--m-fixture-patina",
+      "--m-medallion-bronze",
+      "--m-medallion-bronze-highlight",
+      "--m-medallion-bronze-on",
+      "--m-medallion-bronze-shadow",
+      "--m-medallion-gold",
+      "--m-medallion-gold-highlight",
+      "--m-medallion-gold-on",
+      "--m-medallion-gold-shadow",
+      "--m-medallion-silver",
+      "--m-medallion-silver-highlight",
+      "--m-medallion-silver-on",
+      "--m-medallion-silver-shadow",
     ]) {
       expect(root[t]).toBeDefined();
     }
@@ -130,6 +148,18 @@ describe("surface treatments", () => {
     // canvas-grid must be opt-in: body must not carry the grid
     const body = blockOf(css, "body") ?? "";
     expect(body.includes("repeating-linear-gradient")).toBe(false);
+  });
+
+  it("defines structural fixture treatments using only tokens", () => {
+    for (const sel of [
+      ".m-fixture",
+      ".m-fixture__surface",
+      ".m-medallion",
+      ".m-plaque",
+      ".m-rail",
+    ]) {
+      expect(css.includes(`${sel} {`)).toBe(true);
+    }
   });
 });
 

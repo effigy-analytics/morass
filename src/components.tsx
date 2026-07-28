@@ -115,6 +115,101 @@ export function Card({
   );
 }
 
+export interface FixtureProps extends HTMLAttributes<HTMLElement> {
+  /** Optional trim content positioned above the inset surface. */
+  trim?: ReactNode;
+}
+
+/**
+ * A structural material frame around consumer-owned content. Fixture provides
+ * the physical edge and inset surface without choosing the content semantics
+ * inside it.
+ */
+export function Fixture({
+  children,
+  className,
+  trim,
+  ...props
+}: FixtureProps): ReactElement {
+  return (
+    <section className={cx("m-fixture", className)} {...props}>
+      {trim ? <div className="m-fixture__trim">{trim}</div> : null}
+      <div className="m-fixture__surface">{children}</div>
+    </section>
+  );
+}
+
+export type PlaqueProps = HTMLAttributes<HTMLDivElement>;
+
+/** Compact engraved labeling for a Fixture, section, or durable status. */
+export function Plaque({
+  children,
+  className,
+  ...props
+}: PlaqueProps): ReactElement {
+  return (
+    <div className={cx("m-plaque", className)} {...props}>
+      {children}
+    </div>
+  );
+}
+
+export type MedallionFinish = "bronze" | "gold" | "silver";
+export type MedallionSize = "xs" | "sm" | "md" | "lg";
+
+export interface MedallionProps extends HTMLAttributes<HTMLSpanElement> {
+  /** Material finish. Gold is the default ceremony treatment. */
+  finish?: MedallionFinish;
+  /** Preset diameter; consumers may override `--m-medallion-size`. */
+  size?: MedallionSize;
+}
+
+/**
+ * A compact struck-metal marker for ranks, milestones, and ceremony identity.
+ * Consumers own its short visible content and accessible label.
+ */
+export function Medallion({
+  children,
+  className,
+  finish = "gold",
+  size = "md",
+  ...props
+}: MedallionProps): ReactElement {
+  return (
+    <span
+      className={cx(
+        "m-medallion",
+        `m-medallion--${finish}`,
+        `m-medallion--${size}`,
+        className,
+      )}
+      {...props}
+    >
+      <span className="m-medallion__face">{children}</span>
+    </span>
+  );
+}
+
+export interface RailProps extends HTMLAttributes<HTMLDivElement> {
+  label?: ReactNode;
+}
+
+/**
+ * A joined material divider. Pass a semantic heading through `label` when the
+ * divider introduces content; unlabeled rails are hidden from assistive tech.
+ */
+export function Rail({ className, label, ...props }: RailProps): ReactElement {
+  return (
+    <div
+      aria-hidden={label ? props["aria-hidden"] : true}
+      className={cx("m-rail", className)}
+      {...props}
+    >
+      {label ? <div className="m-rail__label">{label}</div> : null}
+    </div>
+  );
+}
+
 export interface AppFrameProps {
   children: ReactNode;
   header?: ReactNode;
