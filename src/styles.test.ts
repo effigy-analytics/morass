@@ -91,6 +91,12 @@ describe("styles.css invariants", () => {
       "--m-postit-bg",
       "--m-postit-on",
       "--m-postit-shadow",
+      "--m-fixture-metal",
+      "--m-fixture-metal-highlight",
+      "--m-fixture-metal-shadow",
+      "--m-fixture-inset",
+      "--m-fixture-inset-on",
+      "--m-fixture-patina",
     ]) {
       expect(root[t]).toBeDefined();
     }
@@ -130,6 +136,17 @@ describe("surface treatments", () => {
     // canvas-grid must be opt-in: body must not carry the grid
     const body = blockOf(css, "body") ?? "";
     expect(body.includes("repeating-linear-gradient")).toBe(false);
+  });
+
+  it("defines structural fixture treatments using only tokens", () => {
+    for (const sel of [
+      ".m-fixture",
+      ".m-fixture__surface",
+      ".m-plaque",
+      ".m-rail",
+    ]) {
+      expect(css.includes(`${sel} {`)).toBe(true);
+    }
   });
 });
 

@@ -2,6 +2,10 @@
 
 All notable Morass changes should be recorded here before publishing a package version.
 
+## 0.8.0
+
+- Adds `Fixture`, `Plaque`, and `Rail` as composable structural material primitives. The new brass, patina, and inset tokens support explicit light and dark themes, Plaque text joins the contrast contract, and forced-colors mode flattens decorative gradients while preserving boundaries and hierarchy.
+
 ## 0.7.1
 
 - Fixes release publication under npm 12 by passing the canonical package tarball to `npm publish` as an absolute filesystem path. The `0.7.0` GitHub release completed package verification but did not reach npmjs or GitHub Packages because npm interpreted its unprefixed relative tarball path as a GitHub dependency spec.

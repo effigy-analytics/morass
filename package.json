@@ -1,6 +1,6 @@
 {
   "name": "@effigy-analytics/morass",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Composable React UI primitives for durable product interfaces.",
   "type": "module",
   "license": "MIT",
@@ -19,6 +19,7 @@
   "files": [
     "dist",
     "docs/migrations/0.7.md",
+    "docs/migrations/0.8.md",
     "docs/public-contract.md",
     "README.md"
   ],
