@@ -8,6 +8,7 @@ import {
   EmptyState,
   Fixture,
   Hero,
+  Medallion,
   Metric,
   Modal,
   NotFound,
@@ -108,6 +109,20 @@ describe("component primitives", () => {
     expect(framed).toContain('class="m-rail"');
     expect(framed).toContain("<h2>Featured categories</h2>");
     expect(decorativeRail).toContain('aria-hidden="true"');
+  });
+
+  it("renders a tokenized medallion with finish, size, and consumer labeling", () => {
+    const html = renderToStaticMarkup(
+      <Medallion aria-label="First place" finish="gold" size="sm">
+        1
+      </Medallion>,
+    );
+
+    expect(html).toContain(
+      'class="m-medallion m-medallion--gold m-medallion--sm"',
+    );
+    expect(html).toContain('aria-label="First place"');
+    expect(html).toContain('class="m-medallion__face">1</span>');
   });
 
   it("renders Card subtitle and flushes body padding with noPadding", () => {

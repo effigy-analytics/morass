@@ -57,6 +57,18 @@
     --m-fixture-inset: #283431;
     --m-fixture-inset-on: #f8f2df;
     --m-fixture-patina: #568078;
+    --m-medallion-gold: #c39a42;
+    --m-medallion-gold-highlight: #f3dda0;
+    --m-medallion-gold-shadow: #4a3512;
+    --m-medallion-gold-on: #211806;
+    --m-medallion-silver: #bdc8c4;
+    --m-medallion-silver-highlight: #f1f5f3;
+    --m-medallion-silver-shadow: #414b48;
+    --m-medallion-silver-on: #17201e;
+    --m-medallion-bronze: #c77a48;
+    --m-medallion-bronze-highlight: #efb183;
+    --m-medallion-bronze-shadow: #4f2c1a;
+    --m-medallion-bronze-on: #26140a;
   }
 
   /* This complete restatement is intentional: explicit light themes must
@@ -119,6 +131,18 @@
     --m-fixture-inset: #283431;
     --m-fixture-inset-on: #f8f2df;
     --m-fixture-patina: #568078;
+    --m-medallion-gold: #c39a42;
+    --m-medallion-gold-highlight: #f3dda0;
+    --m-medallion-gold-shadow: #4a3512;
+    --m-medallion-gold-on: #211806;
+    --m-medallion-silver: #bdc8c4;
+    --m-medallion-silver-highlight: #f1f5f3;
+    --m-medallion-silver-shadow: #414b48;
+    --m-medallion-silver-on: #17201e;
+    --m-medallion-bronze: #c77a48;
+    --m-medallion-bronze-highlight: #efb183;
+    --m-medallion-bronze-shadow: #4f2c1a;
+    --m-medallion-bronze-on: #26140a;
   }
 
   [data-m-theme="dark"] {
@@ -175,6 +199,18 @@
     --m-fixture-inset: #0f1715;
     --m-fixture-inset-on: #f4ead0;
     --m-fixture-patina: #527f76;
+    --m-medallion-gold: #c39a42;
+    --m-medallion-gold-highlight: #f3dda0;
+    --m-medallion-gold-shadow: #4a3512;
+    --m-medallion-gold-on: #211806;
+    --m-medallion-silver: #bdc8c4;
+    --m-medallion-silver-highlight: #f1f5f3;
+    --m-medallion-silver-shadow: #414b48;
+    --m-medallion-silver-on: #17201e;
+    --m-medallion-bronze: #c77a48;
+    --m-medallion-bronze-highlight: #efb183;
+    --m-medallion-bronze-shadow: #4f2c1a;
+    --m-medallion-bronze-on: #26140a;
   }
 
   /* Auto block: keep identical to [data-m-theme="dark"] above — enforced
@@ -234,6 +270,18 @@
       --m-fixture-inset: #0f1715;
       --m-fixture-inset-on: #f4ead0;
       --m-fixture-patina: #527f76;
+      --m-medallion-gold: #c39a42;
+      --m-medallion-gold-highlight: #f3dda0;
+      --m-medallion-gold-shadow: #4a3512;
+      --m-medallion-gold-on: #211806;
+      --m-medallion-silver: #bdc8c4;
+      --m-medallion-silver-highlight: #f1f5f3;
+      --m-medallion-silver-shadow: #414b48;
+      --m-medallion-silver-on: #17201e;
+      --m-medallion-bronze: #c77a48;
+      --m-medallion-bronze-highlight: #efb183;
+      --m-medallion-bronze-shadow: #4f2c1a;
+      --m-medallion-bronze-on: #26140a;
     }
   }
 
@@ -519,6 +567,94 @@
     padding: 6px 14px;
     text-align: center;
     text-transform: uppercase;
+  }
+
+  .m-medallion {
+    --m-medallion-face: var(--m-medallion-gold);
+    --m-medallion-highlight: var(--m-medallion-gold-highlight);
+    --m-medallion-shadow: var(--m-medallion-gold-shadow);
+    --m-medallion-on: var(--m-medallion-gold-on);
+    align-items: center;
+    aspect-ratio: 1;
+    background:
+      radial-gradient(
+        circle at 34% 28%,
+        var(--m-medallion-highlight) 0 7%,
+        transparent 8%
+      ),
+      radial-gradient(
+        circle,
+        var(--m-medallion-highlight),
+        var(--m-medallion-face) 58%,
+        var(--m-medallion-shadow) 60% 64%,
+        var(--m-medallion-face) 66% 76%,
+        var(--m-medallion-highlight) 78% 82%,
+        var(--m-medallion-shadow) 84%
+      );
+    border: 1px solid var(--m-medallion-shadow);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 0 2px var(--m-medallion-highlight),
+      inset 0 0 0 4px var(--m-medallion-shadow),
+      0 5px 12px color-mix(in srgb, var(--m-medallion-shadow) 34%, transparent);
+    color: var(--m-medallion-on);
+    display: inline-grid;
+    flex: 0 0 auto;
+    font-weight: 900;
+    height: var(--m-medallion-size, 64px);
+    isolation: isolate;
+    line-height: 1;
+    place-items: center;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .m-medallion__face {
+    align-items: center;
+    display: grid;
+    justify-items: center;
+    max-width: 72%;
+  }
+
+  .m-medallion--gold {
+    --m-medallion-face: var(--m-medallion-gold);
+    --m-medallion-highlight: var(--m-medallion-gold-highlight);
+    --m-medallion-shadow: var(--m-medallion-gold-shadow);
+    --m-medallion-on: var(--m-medallion-gold-on);
+  }
+
+  .m-medallion--silver {
+    --m-medallion-face: var(--m-medallion-silver);
+    --m-medallion-highlight: var(--m-medallion-silver-highlight);
+    --m-medallion-shadow: var(--m-medallion-silver-shadow);
+    --m-medallion-on: var(--m-medallion-silver-on);
+  }
+
+  .m-medallion--bronze {
+    --m-medallion-face: var(--m-medallion-bronze);
+    --m-medallion-highlight: var(--m-medallion-bronze-highlight);
+    --m-medallion-shadow: var(--m-medallion-bronze-shadow);
+    --m-medallion-on: var(--m-medallion-bronze-on);
+  }
+
+  .m-medallion--xs {
+    --m-medallion-size: 24px;
+    font-size: 0.68rem;
+  }
+
+  .m-medallion--sm {
+    --m-medallion-size: 40px;
+    font-size: 1rem;
+  }
+
+  .m-medallion--md {
+    --m-medallion-size: 64px;
+    font-size: 1.5rem;
+  }
+
+  .m-medallion--lg {
+    --m-medallion-size: 96px;
+    font-size: 2rem;
   }
 
   .m-rail {
@@ -941,6 +1077,7 @@
     .m-status-pill,
     .m-fixture,
     .m-fixture__surface,
+    .m-medallion,
     .m-plaque,
     .m-rail::before,
     .m-rail::after {
@@ -949,6 +1086,7 @@
 
     .m-fixture,
     .m-fixture__surface,
+    .m-medallion,
     .m-plaque,
     .m-rail::before,
     .m-rail::after {

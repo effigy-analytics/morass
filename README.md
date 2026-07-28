@@ -45,7 +45,7 @@ import { AppFrame, Button, Card, StatusPill } from "@effigy-analytics/morass";
 import "@effigy-analytics/morass/styles.css";
 ```
 
-Primitives: `AppFrame`, `ShellLayout`, `Button`, `ButtonLink`, `Card`, `Fixture`, `Plaque`, `Rail`, `Hero`, `PageHeader`, `PageSection`, `EmptyState`, `NotFound`, `TextField`, `SelectField`, `StatusPill`, `Metric`, `Tabs`, `ProgressSteps`, and `Modal`, plus theme, contrast, material, tone, and class-name helpers.
+Primitives: `AppFrame`, `ShellLayout`, `Button`, `ButtonLink`, `Card`, `Fixture`, `Plaque`, `Medallion`, `Rail`, `Hero`, `PageHeader`, `PageSection`, `EmptyState`, `NotFound`, `TextField`, `SelectField`, `StatusPill`, `Metric`, `Tabs`, `ProgressSteps`, and `Modal`, plus theme, contrast, material, tone, and class-name helpers.
 
 `Tabs` requires one of two honest semantic modes. Use `mode="tabs"` with active content to render a linked tablist and tabpanel; use `mode="selection"` without children for filter-like selection buttons:
 

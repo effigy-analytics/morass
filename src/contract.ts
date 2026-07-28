@@ -191,6 +191,21 @@ export const REQUIRED_PAIRS: readonly RequiredPair[] = [
     context: "engraved Plaque label",
     fg: "--m-fixture-inset-on",
   },
+  {
+    bg: ["--m-medallion-gold"],
+    context: "gold Medallion label",
+    fg: "--m-medallion-gold-on",
+  },
+  {
+    bg: ["--m-medallion-silver"],
+    context: "silver Medallion label",
+    fg: "--m-medallion-silver-on",
+  },
+  {
+    bg: ["--m-medallion-bronze"],
+    context: "bronze Medallion label",
+    fg: "--m-medallion-bronze-on",
+  },
 ];
 
 type Rgba = [number, number, number, number];

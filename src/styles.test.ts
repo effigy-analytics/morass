@@ -97,6 +97,18 @@ describe("styles.css invariants", () => {
       "--m-fixture-inset",
       "--m-fixture-inset-on",
       "--m-fixture-patina",
+      "--m-medallion-bronze",
+      "--m-medallion-bronze-highlight",
+      "--m-medallion-bronze-on",
+      "--m-medallion-bronze-shadow",
+      "--m-medallion-gold",
+      "--m-medallion-gold-highlight",
+      "--m-medallion-gold-on",
+      "--m-medallion-gold-shadow",
+      "--m-medallion-silver",
+      "--m-medallion-silver-highlight",
+      "--m-medallion-silver-on",
+      "--m-medallion-silver-shadow",
     ]) {
       expect(root[t]).toBeDefined();
     }
@@ -142,6 +154,7 @@ describe("surface treatments", () => {
     for (const sel of [
       ".m-fixture",
       ".m-fixture__surface",
+      ".m-medallion",
       ".m-plaque",
       ".m-rail",
     ]) {

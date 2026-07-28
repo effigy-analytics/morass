@@ -4,7 +4,7 @@ All notable Morass changes should be recorded here before publishing a package v
 
 ## 0.8.0
 
-- Adds `Fixture`, `Plaque`, and `Rail` as composable structural material primitives. The new brass, patina, and inset tokens support explicit light and dark themes, Plaque text joins the contrast contract, and forced-colors mode flattens decorative gradients while preserving boundaries and hierarchy.
+- Adds `Fixture`, `Plaque`, `Medallion`, and `Rail` as composable structural material primitives. The new brass, patina, inset, and struck-metal tokens support explicit light and dark themes; Plaque and Medallion text join the contrast contract; and forced-colors mode flattens decorative gradients while preserving boundaries and hierarchy.
 
 ## 0.7.1
 

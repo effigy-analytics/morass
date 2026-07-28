@@ -154,6 +154,42 @@ export function Plaque({
   );
 }
 
+export type MedallionFinish = "bronze" | "gold" | "silver";
+export type MedallionSize = "xs" | "sm" | "md" | "lg";
+
+export interface MedallionProps extends HTMLAttributes<HTMLSpanElement> {
+  /** Material finish. Gold is the default ceremony treatment. */
+  finish?: MedallionFinish;
+  /** Preset diameter; consumers may override `--m-medallion-size`. */
+  size?: MedallionSize;
+}
+
+/**
+ * A compact struck-metal marker for ranks, milestones, and ceremony identity.
+ * Consumers own its short visible content and accessible label.
+ */
+export function Medallion({
+  children,
+  className,
+  finish = "gold",
+  size = "md",
+  ...props
+}: MedallionProps): ReactElement {
+  return (
+    <span
+      className={cx(
+        "m-medallion",
+        `m-medallion--${finish}`,
+        `m-medallion--${size}`,
+        className,
+      )}
+      {...props}
+    >
+      <span className="m-medallion__face">{children}</span>
+    </span>
+  );
+}
+
 export interface RailProps extends HTMLAttributes<HTMLDivElement> {
   label?: ReactNode;
 }

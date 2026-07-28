@@ -13,6 +13,7 @@ describe("public runtime exports", () => {
       "Fixture",
       "Hero",
       "MATERIAL_TREATMENTS",
+      "Medallion",
       "Metric",
       "Modal",
       "NotFound",
