@@ -206,6 +206,61 @@ export const REQUIRED_PAIRS: readonly RequiredPair[] = [
     context: "bronze Medallion label",
     fg: "--m-medallion-bronze-on",
   },
+  {
+    bg: ["--m-workbench-bg"],
+    context: "Studio Workbench ground text",
+    fg: "--m-workbench-on",
+  },
+  {
+    bg: ["--m-sheet-bg"],
+    context: "Studio Workbench sheet text",
+    fg: "--m-sheet-on",
+  },
+  {
+    bg: ["--m-index-card-bg"],
+    context: "Studio Workbench index-card text",
+    fg: "--m-sheet-on",
+  },
+  {
+    bg: ["--m-felt-action"],
+    context: "Studio Workbench felt action label",
+    fg: "--m-felt-action-on",
+  },
+  {
+    bg: ["--m-felt-action-strong"],
+    context: "Studio Workbench pressed felt action label",
+    fg: "--m-felt-action-on",
+  },
+  {
+    bg: ["--m-highlight-sage"],
+    context: "Studio Workbench text over sage highlighter",
+    fg: "--m-sheet-on",
+  },
+  {
+    bg: ["--m-highlight-rose"],
+    context: "Studio Workbench text over rose highlighter",
+    fg: "--m-sheet-on",
+  },
+  {
+    bg: ["--m-highlight-butter"],
+    context: "Studio Workbench text over butter highlighter",
+    fg: "--m-sheet-on",
+  },
+  {
+    bg: ["--m-highlight-sky"],
+    context: "Studio Workbench text over sky highlighter",
+    fg: "--m-sheet-on",
+  },
+  {
+    bg: ["--m-highlight-lavender"],
+    context: "Studio Workbench text over lavender highlighter",
+    fg: "--m-sheet-on",
+  },
+  {
+    bg: ["--m-binder-tab-accent"],
+    context: "Studio Workbench active binder-tab label",
+    fg: "--m-sheet-on",
+  },
 ];
 
 type Rgba = [number, number, number, number];

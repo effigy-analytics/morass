@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en" data-m-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="CSS-first visual prototype for the Morass Studio Workbench design direction."
+    />
+    <title>Morass Studio Workbench prototype</title>
+    <link rel="stylesheet" href="../src/styles.css" />
+    <link rel="stylesheet" href="./studio-workbench.css" />
+  </head>
+  <body class="m-workbench-prototype">
+    <header class="m-prototype-toolbar">
+      <div>
+        <p class="m-prototype-kicker">Morass visual study · July 2026</p>
+        <h1>Studio Workbench</h1>
+      </div>
+      <div class="m-prototype-toolbar__actions">
+        <span class="m-prototype-annotation">tactile · crunchy · clean</span>
+        <a class="m-prototype-lab-link" href="./studio-workbench-lab.html">
+          Material laboratory →
+        </a>
+        <button
+          class="m-prototype-theme-toggle"
+          id="theme-toggle"
+          type="button"
+          aria-pressed="false"
+        >
+          <span aria-hidden="true">◐</span>
+          <span data-theme-label>Dark materials</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="m-prototype-main">
+      <section aria-labelledby="awards-title" class="m-prototype-frame">
+        <div class="m-prototype-frame__label">
+          <span>Frame 01</span>
+          Expressive · Awards
+        </div>
+
+        <div class="m-studio m-studio--awards m-workbench">
+          <nav aria-label="Awards sections" class="m-binder-tabs">
+            <a class="m-binder-tab m-binder-tab--rose" href="#awards-title">
+              Tonight
+            </a>
+            <a
+              aria-current="page"
+              class="m-binder-tab m-binder-tab--butter"
+              href="#ballot"
+            >
+              My ballot
+            </a>
+            <a class="m-binder-tab m-binder-tab--sky" href="#ballot">
+              Results
+            </a>
+          </nav>
+
+          <div class="m-studio__sheet m-sheet m-sheet--edge-1">
+            <div class="m-tape m-colored-tape"></div>
+            <div class="m-studio-heading">
+              <div>
+                <p class="m-prototype-kicker">The 98th Academy Awards</p>
+                <h2 id="awards-title">
+                  Make your
+                  <span class="m-highlight m-highlight--rose">picks</span>
+                </h2>
+                <p>
+                  Choose who you expect to win, who you want to win, or both.
+                  Your ballot stays editable until the show begins.
+                </p>
+              </div>
+              <span class="m-studio-status">
+                <span aria-hidden="true"></span>
+                Open until 7:00 PM ET
+              </span>
+            </div>
+
+            <div class="m-awards-layout" id="ballot">
+              <div class="m-card-stack">
+                <article
+                  class="m-index-card m-sheet--edge-2"
+                  aria-labelledby="picture-title"
+                >
+                  <p class="m-index-card__number">01 / 08</p>
+                  <h3 id="picture-title">Best Picture</h3>
+                  <div class="m-choice-stack">
+                    <label class="m-paper-choice">
+                      <input name="picture" type="radio" />
+                      <span>Hamnet</span>
+                    </label>
+                    <label class="m-paper-choice m-paper-choice--selected">
+                      <input checked name="picture" type="radio" />
+                      <span>Sinners</span>
+                      <small>your pick</small>
+                    </label>
+                    <label class="m-paper-choice">
+                      <input name="picture" type="radio" />
+                      <span>One Battle After Another</span>
+                    </label>
+                  </div>
+                  <div class="m-card-pagination" aria-label="Card pages">
+                    <button type="button" aria-label="Previous category">
+                      ←
+                    </button>
+                    <span>clipped stack · 8 cards</span>
+                    <button type="button" aria-label="Next category">→</button>
+                  </div>
+                </article>
+              </div>
+
+              <aside class="m-postit-note m-postit-note--butter">
+                <span class="m-tape m-colored-tape"></span>
+                <p class="m-prototype-annotation">A note for tonight</p>
+                <strong>Trust your first instinct.</strong>
+                <p>
+                  You can flag a favorite separately from your predicted winner.
+                </p>
+              </aside>
+            </div>
+
+            <footer class="m-studio-actions">
+              <span class="m-pencil-note"
+                >6 categories still need a pick ↗</span
+              >
+              <button class="m-button m-felt-action" type="button">
+                Save my ballot
+              </button>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="operations-title" class="m-prototype-frame">
+        <div class="m-prototype-frame__label">
+          <span>Frame 02</span>
+          Quiet · Operations
+        </div>
+
+        <div class="m-studio m-studio--operations m-workbench">
+          <nav aria-label="Workspace sections" class="m-binder-tabs">
+            <a
+              aria-current="page"
+              class="m-binder-tab m-binder-tab--sage"
+              href="#operations-title"
+            >
+              This week
+            </a>
+            <a class="m-binder-tab m-binder-tab--sky" href="#records">
+              Records
+            </a>
+            <a class="m-binder-tab m-binder-tab--lavender" href="#activity">
+              Activity
+            </a>
+          </nav>
+
+          <div class="m-studio__sheet m-sheet m-sheet--edge-3">
+            <div class="m-studio-heading m-studio-heading--compact">
+              <div>
+                <p class="m-prototype-kicker">Household workspace</p>
+                <h2 id="operations-title">
+                  Monday
+                  <span class="m-highlight m-highlight--sage">desk</span>
+                </h2>
+                <p>Three things need attention. Everything else is current.</p>
+              </div>
+              <button class="m-paper-label-button" type="button">
+                Add a record
+              </button>
+            </div>
+
+            <div class="m-operations-grid">
+              <section
+                aria-labelledby="attention-title"
+                class="m-notebook-sheet"
+              >
+                <div class="m-notebook-sheet__content">
+                  <p class="m-prototype-kicker">Attention</p>
+                  <h3 id="attention-title">Coming up</h3>
+                  <ul class="m-task-list">
+                    <li>
+                      <span class="m-task-check" aria-hidden="true"></span>
+                      <div>
+                        <strong>Renew renter’s insurance</strong>
+                        <small>Due Friday · policy attached</small>
+                      </div>
+                      <span class="m-mini-clip" aria-label="1 attachment"
+                        >1</span
+                      >
+                    </li>
+                    <li>
+                      <span class="m-task-check" aria-hidden="true"></span>
+                      <div>
+                        <strong>Review emergency contacts</strong>
+                        <small>Suggested by your annual plan</small>
+                      </div>
+                    </li>
+                    <li class="m-task-list__done">
+                      <span class="m-task-check" aria-hidden="true">✓</span>
+                      <div>
+                        <strong>Archive last month’s receipts</strong>
+                        <small>Completed this morning</small>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </section>
+
+              <aside class="m-record-stack" id="records">
+                <article class="m-index-card m-index-card--small">
+                  <p class="m-prototype-kicker">Next reminder</p>
+                  <h3>Water filter</h3>
+                  <p class="m-record-value">12 days</p>
+                  <p>Kitchen · replaced Mar 9</p>
+                </article>
+                <article class="m-index-card m-index-card--small">
+                  <span class="m-tape m-colored-tape"></span>
+                  <p class="m-prototype-kicker">Shared</p>
+                  <h3>Travel folder</h3>
+                  <p class="m-record-value">4 pages</p>
+                  <p>Itinerary, IDs, coverage</p>
+                </article>
+              </aside>
+            </div>
+
+            <footer class="m-ledger-strip" id="activity">
+              <span><strong>12</strong> current records</span>
+              <span><strong>2</strong> shared folders</span>
+              <span><strong>1</strong> draft</span>
+              <a href="#records">Open the ledger →</a>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="vocabulary-title" class="m-vocabulary">
+        <div>
+          <p class="m-prototype-kicker">Prototype vocabulary</p>
+          <h2 id="vocabulary-title">One ground. Two papers. One mark.</h2>
+        </div>
+        <ul>
+          <li>
+            <span class="m-swatch m-swatch--ground"></span>tabletop ground
+          </li>
+          <li><span class="m-swatch m-swatch--sheet"></span>clean sheet</li>
+          <li><span class="m-swatch m-swatch--card"></span>index card</li>
+          <li><span class="m-swatch m-swatch--mark"></span>highlighter mark</li>
+          <li><span class="m-swatch m-swatch--felt"></span>felt control</li>
+        </ul>
+      </section>
+    </main>
+
+    <script>
+      const toggle = document.querySelector("#theme-toggle");
+      const label = toggle?.querySelector("[data-theme-label]");
+      const root = document.documentElement;
+
+      toggle?.addEventListener("click", () => {
+        const dark = root.dataset.mTheme !== "dark";
+        root.dataset.mTheme = dark ? "dark" : "light";
+        toggle.setAttribute("aria-pressed", String(dark));
+        if (label) {
+          label.textContent = dark ? "Light materials" : "Dark materials";
+        }
+      });
+    </script>
+  </body>
+</html>

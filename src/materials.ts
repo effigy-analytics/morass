@@ -12,3 +12,20 @@ export const MATERIAL_TREATMENTS: Record<MaterialRole, string[]> = {
   ephemeral: [".m-postit"],
   "control-status": [".m-felt", ".m-stitch"],
 };
+
+/**
+ * Opt-in Studio Workbench vocabulary. Unlike MATERIAL_TREATMENTS, these
+ * selectors describe the approved 2026-07 prototype foundation and do not
+ * imply that existing Morass components compose the treatment automatically.
+ */
+export type StudioTreatmentRole =
+  "workbench" | "sheet" | "index-card" | "highlight" | "attachment" | "action";
+
+export const STUDIO_TREATMENTS: Record<StudioTreatmentRole, string[]> = {
+  workbench: [".m-workbench"],
+  sheet: [".m-sheet"],
+  "index-card": [".m-index-card"],
+  highlight: [".m-highlight"],
+  attachment: [".m-tape"],
+  action: [".m-felt-action"],
+};

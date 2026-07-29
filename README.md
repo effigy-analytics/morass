@@ -152,6 +152,8 @@ Morass supports browser-DOM React applications using React and React DOM 18.2 or
 - [Applying the Morass 0.7.1 craft material roles](https://github.com/effigy-analytics/morass/blob/main/docs/craft-application-profile.md)
 - [Migrating 0.4–0.6 consumers to the 0.7 baseline](docs/migrations/0.7.md)
 - [Adopting the 0.8 structural material fixtures](docs/migrations/0.8.md)
+- [Adopting the 0.9 Studio Workbench vocabulary](docs/migrations/0.9.md)
+- [Composing with the Studio Workbench CSS contract](docs/studio-workbench.md)
 - [GitHub issues](https://github.com/effigy-analytics/morass/issues) for support and defects
 - [Private security report](https://github.com/effigy-analytics/morass/security/advisories/new) for vulnerabilities
 
