@@ -161,7 +161,12 @@ describe("component primitives", () => {
         actions={<button>Menu</button>}
         appName="Effigy Awards"
         environment="dev"
+        headerInnerClassName="product-shell"
+        mobileNav={<a href="/shows">Shows</a>}
+        mobileNavClassName="product-mobile-nav"
+        mobileNavLabel="Awards"
         nav={<a href="/">Home</a>}
+        navClassName="product-desktop-nav"
       >
         Page
       </ShellLayout>,
@@ -172,8 +177,13 @@ describe("component primitives", () => {
     expect(html).toContain(
       'class="m-shell__env m-felt m-felt--butter m-stitch">dev</span>',
     );
-    expect(html).toContain('class="m-shell__nav"');
+    expect(html).toContain('class="m-app-frame__header-inner product-shell"');
+    expect(html).toContain('class="m-shell__nav product-desktop-nav"');
     expect(html).toContain('class="m-shell__actions"');
+    expect(html).toContain(
+      'aria-label="Awards" class="m-app-frame__nav product-mobile-nav"',
+    );
+    expect(html).toContain('href="/shows">Shows</a>');
     expect(html).toContain("Page");
   });
 
