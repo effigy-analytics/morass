@@ -213,14 +213,23 @@ export function Rail({ className, label, ...props }: RailProps): ReactElement {
 export interface AppFrameProps {
   children: ReactNode;
   header?: ReactNode;
+  /** Optional consumer class for a full-width header content wrapper. */
+  headerInnerClassName?: string;
   nav?: ReactNode;
+  /** Accessible name for the responsive navigation landmark. */
+  navLabel?: string;
+  /** Optional consumer class for the responsive navigation landmark. */
+  navClassName?: string;
   sidebar?: ReactNode;
 }
 
 export function AppFrame({
   children,
   header,
+  headerInnerClassName,
   nav,
+  navLabel,
+  navClassName,
   sidebar,
 }: AppFrameProps): ReactElement {
   return (
@@ -232,10 +241,30 @@ export function AppFrame({
       ) : null}
       <div className="m-app-frame__main">
         {header ? (
-          <header className="m-app-frame__header">{header}</header>
+          <header className="m-app-frame__header">
+            {headerInnerClassName ? (
+              <div
+                className={cx(
+                  "m-app-frame__header-inner",
+                  headerInnerClassName,
+                )}
+              >
+                {header}
+              </div>
+            ) : (
+              header
+            )}
+          </header>
         ) : null}
         <main className="m-app-frame__content">{children}</main>
-        {nav ? <nav className="m-app-frame__nav">{nav}</nav> : null}
+        {nav ? (
+          <nav
+            aria-label={navLabel}
+            className={cx("m-app-frame__nav", navClassName)}
+          >
+            {nav}
+          </nav>
+        ) : null}
       </div>
     </div>
   );
@@ -251,8 +280,18 @@ export interface ShellLayoutProps {
   children: ReactNode;
   /** Environment name; shown as a felt pill unless prod/empty. */
   environment?: string;
+  /** Optional consumer class for a full-width, alignable header inner. */
+  headerInnerClassName?: string;
+  /** Compact primary navigation shown by AppFrame at responsive widths. */
+  mobileNav?: ReactNode;
+  /** Optional consumer class for the responsive navigation landmark. */
+  mobileNavClassName?: string;
+  /** Accessible name for the responsive navigation landmark. */
+  mobileNavLabel?: string;
   /** Primary navigation — pass your router's links (e.g. `NavLink`). */
   nav?: ReactNode;
+  /** Optional consumer class for the header navigation landmark. */
+  navClassName?: string;
 }
 
 /**
@@ -265,7 +304,12 @@ export function ShellLayout({
   appName,
   children,
   environment,
+  headerInnerClassName,
+  mobileNav,
+  mobileNavClassName,
+  mobileNavLabel = "Primary",
   nav,
+  navClassName,
 }: ShellLayoutProps): ReactElement {
   const showEnvironment =
     environment !== undefined && !HIDDEN_ENVIRONMENTS.has(environment);
@@ -277,11 +321,23 @@ export function ShellLayout({
           {environment}
         </span>
       ) : null}
-      {nav ? <nav className="m-shell__nav">{nav}</nav> : null}
+      {nav ? (
+        <nav className={cx("m-shell__nav", navClassName)}>{nav}</nav>
+      ) : null}
       {actions ? <div className="m-shell__actions">{actions}</div> : null}
     </>
   );
-  return <AppFrame header={header}>{children}</AppFrame>;
+  return (
+    <AppFrame
+      header={header}
+      headerInnerClassName={headerInnerClassName}
+      nav={mobileNav}
+      navClassName={mobileNavClassName}
+      navLabel={mobileNavLabel}
+    >
+      {children}
+    </AppFrame>
+  );
 }
 
 export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {

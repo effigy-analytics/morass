@@ -424,6 +424,14 @@
     z-index: 5;
   }
 
+  .m-app-frame__header-inner {
+    align-items: center;
+    display: flex;
+    gap: 16px;
+    min-width: 0;
+    width: 100%;
+  }
+
   .m-app-frame__content {
     min-width: 0;
     padding: 24px;
@@ -435,6 +443,7 @@
     display: none;
     gap: 8px;
     padding: 8px;
+    z-index: 5;
   }
 
   .m-button {
