@@ -2,6 +2,21 @@
 
 All notable Morass changes should be recorded here before publishing a package version.
 
+## 0.9.0
+
+- Adds the opt-in Studio Workbench foundation without changing existing
+  component defaults: pastel-green workbench, sheet and index-card surfaces,
+  causal highlighter and torn-end tape treatments, controlled paper-edge
+  variants, stacked sheets, and a stateful felt action treatment.
+- Exports `STUDIO_TREATMENTS`, a six-role selector map for workbench, sheet,
+  index-card, highlight, attachment, and action treatments.
+- Extends built-in light/dark themes and `REQUIRED_PAIRS` with the Studio
+  Workbench tokens and text combinations. Highlighter, workbench, sheet,
+  index-card, and felt-action pairings are gated at WCAG AA.
+- Adds semantic-agnostic binder-tab CSS primitives with long-label overflow,
+  explicit active/current treatments, visible focus, reduced-motion behavior,
+  and forced-colors fallbacks.
+
 ## 0.8.0
 
 - Adds `Fixture`, `Plaque`, `Medallion`, and `Rail` as composable structural material primitives. The new brass, patina, inset, and struck-metal tokens support explicit light and dark themes; Plaque and Medallion text join the contrast contract; and forced-colors mode flattens decorative gradients while preserving boundaries and hierarchy.

@@ -1,13 +1,13 @@
-# Morass 0.8 public contract
+# Morass 0.9 public contract
 
-This document describes the supported 0.8 package surface. It deliberately distinguishes shipped behavior from future design-system direction.
+This document describes the supported 0.9 package surface. It deliberately distinguishes shipped behavior from future design-system direction.
 
 ## Package and runtime
 
 - Public npmjs is canonical: `npm install @effigy-analytics/morass` requires no token.
 - The root package ships typed ESM and CommonJS builds. `./reminders` is a separate typed subpath and `./styles.css` is the stylesheet subpath.
 - React and React DOM `^18.2.0 || ^19.0.0` are peers. CI exercises the minimum React 18 line and the repository's pinned React 19 line as disposable consumers.
-- Components target browser DOM applications. React Native, React Server Components, and hydration-specific guarantees are not part of the 0.8 contract.
+- Components target browser DOM applications. React Native, React Server Components, and hydration-specific guarantees are not part of the 0.9 contract.
 - The JavaScript build target is ES2022. CSS requires custom properties, Cascade Layers, `prefers-color-scheme`, and `prefers-reduced-motion`; forced-colors behavior is supplied where the browser exposes that media query. Morass supports modern evergreen browsers with those capabilities rather than promising historical version floors that are not browser-tested.
 - Import `@effigy-analytics/morass/styles.css` once at the application entry. The stylesheet sets global `box-sizing` and the `body` background, foreground, margin, and font.
 
@@ -29,7 +29,7 @@ The public component contract covers exported names, TypeScript props, documente
 
 `themes.light` is the complete base token record. `themes.dark` is an overlay that inherits structural tokens such as radius and font. Explicit `data-m-theme="light"` and `data-m-theme="dark"` pin native and Morass colors; no attribute follows the operating-system preference. Attributes may scope a subtree.
 
-All `--m-*` names declared by the 0.8 base theme are public during the 0.8 line. A pre-1 minor release may revise them with a migration note. Consumer JavaScript themes should start with `themes.light`; CSS themes may override only the tokens they need because custom properties cascade.
+All `--m-*` names declared by the 0.9 base theme are public during the 0.9 line. A pre-1 minor release may revise them with a migration note. Consumer JavaScript themes should start with `themes.light`; CSS themes may override only the tokens they need because custom properties cascade.
 
 The supported material utility classes are:
 
@@ -38,6 +38,9 @@ The supported material utility classes are:
 - `.m-postit`
 - `.m-felt` plus one complete swatch modifier: `.m-felt--sage`, `.m-felt--butter`, `.m-felt--rose`, `.m-felt--sky`, or `.m-felt--lavender`
 - `.m-stitch`
+- the opt-in [Studio Workbench CSS contract](studio-workbench.md), including
+  workbench, sheet, index-card, highlighter, tape, felt-action, and
+  semantic-agnostic binder-tab selectors
 
 `validateTheme` checks exported `REQUIRED_PAIRS`: component text uses a 4.5:1 threshold and the input boundary and focus indicator use 3:1, including the AppFrame sidebar and composited Modal backdrop. It throws for missing, invalid, or out-of-range contract colors. This validates the declared Morass pairs, not every combination an application can create, its semantics, or its complete accessibility. Normal-theme colors use tokens; forced-colors fallbacks intentionally use operating-system color keywords.
 

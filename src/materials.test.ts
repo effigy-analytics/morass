@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { MATERIAL_TREATMENTS } from "./materials";
+import { MATERIAL_TREATMENTS, STUDIO_TREATMENTS } from "./materials";
 
 const css = readFileSync(
   fileURLToPath(new URL("./styles.css", import.meta.url)),
@@ -20,6 +20,27 @@ describe("material → role map", () => {
 
   it("references only treatment classes that exist in styles.css", () => {
     for (const classes of Object.values(MATERIAL_TREATMENTS)) {
+      for (const cls of classes) {
+        expect(css.includes(`${cls} {`)).toBe(true);
+      }
+    }
+  });
+});
+
+describe("Studio Workbench treatment map", () => {
+  it("maps the six opt-in treatment roles", () => {
+    expect(Object.keys(STUDIO_TREATMENTS).sort()).toEqual([
+      "action",
+      "attachment",
+      "highlight",
+      "index-card",
+      "sheet",
+      "workbench",
+    ]);
+  });
+
+  it("references only treatment classes that exist in styles.css", () => {
+    for (const classes of Object.values(STUDIO_TREATMENTS)) {
       for (const cls of classes) {
         expect(css.includes(`${cls} {`)).toBe(true);
       }

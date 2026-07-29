@@ -23,6 +23,7 @@ describe("public runtime exports", () => {
       "ProgressSteps",
       "REQUIRED_PAIRS",
       "Rail",
+      "STUDIO_TREATMENTS",
       "SelectField",
       "ShellLayout",
       "StatusPill",

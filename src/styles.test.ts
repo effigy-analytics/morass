@@ -109,6 +109,25 @@ describe("styles.css invariants", () => {
       "--m-medallion-silver-highlight",
       "--m-medallion-silver-on",
       "--m-medallion-silver-shadow",
+      "--m-workbench-bg",
+      "--m-workbench-on",
+      "--m-workbench-grid",
+      "--m-sheet-bg",
+      "--m-sheet-on",
+      "--m-sheet-border",
+      "--m-sheet-shadow",
+      "--m-index-card-bg",
+      "--m-index-card-line",
+      "--m-highlight-sage",
+      "--m-highlight-rose",
+      "--m-highlight-butter",
+      "--m-highlight-sky",
+      "--m-highlight-lavender",
+      "--m-binder-tab-accent",
+      "--m-attachment-tape",
+      "--m-felt-action",
+      "--m-felt-action-strong",
+      "--m-felt-action-on",
     ]) {
       expect(root[t]).toBeDefined();
     }
@@ -161,6 +180,48 @@ describe("surface treatments", () => {
       expect(css.includes(`${sel} {`)).toBe(true);
     }
   });
+
+  it("defines the opt-in Studio Workbench surfaces", () => {
+    for (const sel of [
+      ".m-workbench",
+      ".m-sheet",
+      ".m-index-card",
+      ".m-highlight",
+      ".m-tape",
+      ".m-felt-action",
+    ]) {
+      expect(css.includes(`${sel} {`)).toBe(true);
+    }
+  });
+
+  it("keeps highlighter stroke edges distinct from torn tape ends", () => {
+    const highlighter = blockOf(css, ".m-highlight::before") ?? "";
+    const tapeStart = css.lastIndexOf(".m-tape {");
+    const tape = blockOf(css.slice(tapeStart), ".m-tape") ?? "";
+    expect(highlighter).toContain("53% 8%");
+    expect(highlighter).toContain("filter: blur(0.2px)");
+    expect(tape).toContain("10% 0");
+    expect(tape).toContain("90% 100%");
+    expect(tape).not.toEqual(highlighter);
+  });
+
+  it("keeps binder tabs usable and stateful without prescribing semantics", () => {
+    const list = blockOf(css, ".m-binder-tabs") ?? "";
+    const tab = blockOf(css, ".m-binder-tab") ?? "";
+    const current = blockOf(css, ".m-binder-tab--current") ?? "";
+
+    expect(list).toContain("overflow-x: auto");
+    expect(list).toContain("display: flex");
+    expect(tab).toContain("max-inline-size:");
+    expect(tab).toContain("min-height: 44px");
+    expect(tab).toContain("overflow-wrap: anywhere");
+    expect(current).toContain("font-weight: 800");
+    expect(css).toContain(".m-binder-tab--active");
+    expect(css).toContain(".m-binder-tab--rose");
+    expect(css).toContain('.m-binder-tab[aria-current="page"]');
+    expect(css).toContain('.m-binder-tab[aria-selected="true"]');
+    expect(css).toContain(".m-binder-tab:focus-visible");
+  });
 });
 
 describe("control treatments", () => {
@@ -181,6 +242,10 @@ describe("control treatments", () => {
     expect(forcedColors).toContain("ButtonText");
     expect(forcedColors).toContain("Highlight");
     expect(forcedColors).toContain("HighlightText");
+    expect(forcedColors).toContain(".m-highlight::before");
+    expect(forcedColors).toContain(".m-tape");
+    expect(forcedColors).toContain(".m-binder-tab");
+    expect(forcedColors).toContain(".m-binder-tab--current");
 
     const reducedMotion =
       blockOf(css, "@media (prefers-reduced-motion: reduce)") ?? "";

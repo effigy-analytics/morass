@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en" data-m-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Analytical material laboratory for the Morass Studio Workbench direction."
+    />
+    <title>Morass Studio Workbench material laboratory</title>
+    <link rel="stylesheet" href="../src/styles.css" />
+    <link rel="stylesheet" href="./studio-workbench.css" />
+    <link rel="stylesheet" href="./studio-workbench-lab.css" />
+  </head>
+  <body class="m-workbench-prototype m-lab" data-m-gesture="overshoot">
+    <header class="m-prototype-toolbar">
+      <div>
+        <p class="m-prototype-kicker">Morass visual study · July 2026</p>
+        <h1>Material laboratory</h1>
+      </div>
+      <div class="m-prototype-toolbar__actions">
+        <a class="m-prototype-lab-link" href="./studio-workbench.html">
+          ← Product frames
+        </a>
+        <button
+          class="m-prototype-theme-toggle"
+          id="theme-toggle"
+          type="button"
+          aria-pressed="false"
+        >
+          <span aria-hidden="true">◐</span>
+          <span data-theme-label>Dark materials</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="m-lab-main">
+      <section class="m-lab-intro" aria-labelledby="lab-title">
+        <div>
+          <p class="m-prototype-kicker">Working thesis</p>
+          <h2 id="lab-title">Tune the hand, not the system.</h2>
+          <p>
+            The information architecture stays exact. Materials may overshoot,
+            overlap, and carry evidence of a person. Use this sheet to decide
+            how confidently each gesture should behave before it becomes a
+            Morass primitive.
+          </p>
+        </div>
+        <fieldset class="m-lab-control">
+          <legend>Gesture confidence</legend>
+          <div>
+            <button
+              type="button"
+              data-gesture-option="measured"
+              aria-pressed="false"
+            >
+              Measured
+            </button>
+            <button
+              type="button"
+              data-gesture-option="confident"
+              aria-pressed="false"
+            >
+              Confident
+            </button>
+            <button
+              type="button"
+              data-gesture-option="overshoot"
+              aria-pressed="true"
+            >
+              Overshoot
+            </button>
+          </div>
+          <p>Changes only the laboratory specimens below.</p>
+        </fieldset>
+      </section>
+
+      <section class="m-lab-section" aria-labelledby="palette-title">
+        <header class="m-lab-section__header">
+          <div>
+            <p class="m-prototype-kicker">01 · Identity</p>
+            <h2 id="palette-title">The Effigy green family</h2>
+          </div>
+          <p>
+            Green owns the workspace, structure, ink, and felt. Each role needs
+            enough separation to avoid one flat green field.
+          </p>
+        </header>
+
+        <div class="m-lab-palette">
+          <article class="m-lab-swatch m-lab-swatch--ground">
+            <span></span>
+            <div>
+              <strong>Cutting mat</strong>
+              <p>Suite identity · page ground</p>
+              <code>ground</code>
+            </div>
+          </article>
+          <article class="m-lab-swatch m-lab-swatch--mat">
+            <span></span>
+            <div>
+              <strong>Workbench</strong>
+              <p>Bounded making surface</p>
+              <code>mat</code>
+            </div>
+          </article>
+          <article class="m-lab-swatch m-lab-swatch--ink">
+            <span></span>
+            <div>
+              <strong>Green ink</strong>
+              <p>Text on the cutting mat</p>
+              <code>ground-ink</code>
+            </div>
+          </article>
+          <article class="m-lab-swatch m-lab-swatch--sage">
+            <span></span>
+            <div>
+              <strong>Sage mark</strong>
+              <p>Operational selection</p>
+              <code>sage</code>
+            </div>
+          </article>
+          <article class="m-lab-swatch m-lab-swatch--felt">
+            <span></span>
+            <div>
+              <strong>Felt</strong>
+              <p>Primary interaction</p>
+              <code>felt</code>
+            </div>
+          </article>
+        </div>
+
+        <div class="m-lab-rule">
+          <strong>Decision rule</strong>
+          <p>
+            If two adjacent greens have the same job or similar luminance,
+            remove one. Family resemblance should come from hue—not visual
+            ambiguity.
+          </p>
+        </div>
+      </section>
+
+      <section
+        class="m-lab-section m-lab-stage"
+        aria-labelledby="gesture-title"
+      >
+        <header class="m-lab-section__header">
+          <div>
+            <p class="m-prototype-kicker">02 · Gesture</p>
+            <h2 id="gesture-title">Highlighter is a stroke, not a strip</h2>
+          </div>
+          <p>
+            The semantic unit stays small, but the human mark may extend beyond
+            it. Blunt chisel ends, soft pressure variation, and translucent
+            overlap distinguish ink from a torn material.
+          </p>
+        </header>
+
+        <div class="m-lab-highlight-grid">
+          <article>
+            <p class="m-lab-specimen-label">Inline · selected phrase</p>
+            <p class="m-lab-inline-sample">
+              Your ballot remains
+              <span class="m-highlight m-highlight--rose">editable</span>
+              until showtime.
+            </p>
+          </article>
+          <article>
+            <p class="m-lab-specimen-label">Heading · active subject</p>
+            <h3>
+              Best
+              <span class="m-highlight m-highlight--sage">Picture</span>
+            </h3>
+          </article>
+          <article class="m-lab-highlight-broad">
+            <p class="m-lab-specimen-label">Broad · authored declaration</p>
+            <h3>
+              Make your
+              <span class="m-highlight m-highlight--rose">picks</span>
+            </h3>
+          </article>
+        </div>
+
+        <div class="m-lab-rule">
+          <strong>Decision rule</strong>
+          <p>
+            One broad mark may dominate a region. Supporting marks must step
+            down in size or disappear.
+          </p>
+        </div>
+      </section>
+
+      <section class="m-lab-section m-lab-stage" aria-labelledby="tape-title">
+        <header class="m-lab-section__header">
+          <div>
+            <p class="m-prototype-kicker">03 · Attachment</p>
+            <h2 id="tape-title">Tape tears at the ends</h2>
+          </div>
+          <p>
+            Tape is always blue across products. Its manufactured long edges
+            stay straight; only the short ends carry a torn edge. Directional
+            fibers and translucency make it a material rather than a mark.
+          </p>
+        </header>
+
+        <div class="m-lab-tape-board">
+          <article class="m-lab-taped-object m-lab-taped-object--tab">
+            <span class="m-tape m-lab-tape" aria-hidden="true"></span>
+            <p class="m-lab-specimen-label">Tab</p>
+            <h3>Supporting note</h3>
+            <p>One small attachment on a durable sheet.</p>
+          </article>
+          <article class="m-lab-taped-object m-lab-taped-object--strip">
+            <span class="m-tape m-lab-tape" aria-hidden="true"></span>
+            <p class="m-lab-specimen-label">Strip</p>
+            <h3>Featured record</h3>
+            <p>Attachment is intentionally visible before the content.</p>
+          </article>
+          <div class="m-lab-tape-bridge">
+            <article>
+              <p class="m-lab-specimen-label">Page A</p>
+              <strong>Policy</strong>
+            </article>
+            <span class="m-tape m-lab-tape" aria-hidden="true"></span>
+            <article>
+              <p class="m-lab-specimen-label">Page B</p>
+              <strong>Receipt</strong>
+            </article>
+          </div>
+        </div>
+
+        <div class="m-lab-rule">
+          <strong>Decision rule</strong>
+          <p>
+            A tape bridge asserts a real relationship. Never use it merely to
+            fill negative space.
+          </p>
+        </div>
+      </section>
+
+      <section class="m-lab-section" aria-labelledby="objects-title">
+        <header class="m-lab-section__header">
+          <div>
+            <p class="m-prototype-kicker">04 · Objects</p>
+            <h2 id="objects-title">Credibility before vocabulary</h2>
+          </div>
+          <p>
+            A smaller set of convincing objects is stronger than a complete
+            craft-store inventory.
+          </p>
+        </header>
+
+        <div class="m-lab-object-grid">
+          <article class="m-lab-object">
+            <div class="m-lab-sheet-stack">
+              <span>03</span>
+              <strong>Related pages</strong>
+            </div>
+            <p><strong>Stacked sheet</strong> · multiple pages</p>
+          </article>
+          <article class="m-lab-object">
+            <div class="m-lab-index-card">
+              <span>FIELD NOTE · 07</span>
+              <strong>Keep the reading surface quiet.</strong>
+            </div>
+            <p><strong>Index card</strong> · compact durable fact</p>
+          </article>
+          <article class="m-lab-object">
+            <div class="m-lab-postit">
+              <span class="m-tape m-lab-tape" aria-hidden="true"></span>
+              <strong>Temporary</strong>
+              <p>Remove after review.</p>
+            </div>
+            <p><strong>Post-it</strong> · provisional thought</p>
+          </article>
+          <article class="m-lab-object">
+            <div class="m-lab-felt-states">
+              <button class="m-button m-felt-action" type="button">
+                Save changes
+              </button>
+              <button
+                class="m-button m-felt-action"
+                type="button"
+                data-state="pressed"
+              >
+                Saving…
+              </button>
+              <button class="m-button m-felt-action" type="button" disabled>
+                Unavailable
+              </button>
+            </div>
+            <p><strong>Felt</strong> · primary interaction states</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="m-lab-section" aria-labelledby="type-title">
+        <header class="m-lab-section__header">
+          <div>
+            <p class="m-prototype-kicker">05 · Readability</p>
+            <h2 id="type-title">Three voices, one reading system</h2>
+          </div>
+          <p>
+            Display, body, and annotation can differ without turning every
+            sentence into a prop.
+          </p>
+        </header>
+
+        <div class="m-lab-type-grid">
+          <article>
+            <p class="m-lab-specimen-label">Display</p>
+            <h3>Monday desk</h3>
+            <p>Large, modern, authored. Never faux-handwritten.</p>
+          </article>
+          <article>
+            <p class="m-lab-specimen-label">Body</p>
+            <p class="m-lab-body-copy">
+              Review the household records that have changed since your last
+              visit. Each item keeps its source, visibility, and next action
+              close to the content.
+            </p>
+          </article>
+          <article>
+            <p class="m-lab-specimen-label">Annotation</p>
+            <p class="m-lab-annotation-copy">
+              ADDED BY YOU · REVIEWED TUESDAY ↗
+            </p>
+            <p>Short, uppercase, and structurally secondary.</p>
+          </article>
+        </div>
+
+        <div class="m-lab-ledger" role="table" aria-label="Readability ledger">
+          <div role="row">
+            <span role="columnheader">Record</span>
+            <span role="columnheader">Source</span>
+            <span role="columnheader">Next change</span>
+            <span role="columnheader">State</span>
+          </div>
+          <div role="row">
+            <strong role="cell">Renter’s insurance</strong>
+            <span role="cell">Uploaded policy</span>
+            <span role="cell">Friday</span>
+            <span role="cell">Needs review</span>
+          </div>
+          <div role="row">
+            <strong role="cell">Emergency contacts</strong>
+            <span role="cell">Household plan</span>
+            <span role="cell">Oct 12</span>
+            <span role="cell">Current</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="m-lab-section" aria-labelledby="adoption-title">
+        <header class="m-lab-section__header">
+          <div>
+            <p class="m-prototype-kicker">06 · Adoption</p>
+            <h2 id="adoption-title">Prototype before default</h2>
+          </div>
+          <p>
+            Each Morass component earns a treatment through semantics,
+            accessibility, and use in both expressive and operational frames.
+          </p>
+        </header>
+
+        <div class="m-lab-adoption">
+          <div>
+            <strong>Ready to prototype</strong>
+            <p>Tabs · Card variants · Button · PageHeader</p>
+          </div>
+          <div>
+            <strong>Needs interaction study</strong>
+            <p>ProgressSteps · form selection · stacked-page controls</p>
+          </div>
+          <div>
+            <strong>Keep quiet initially</strong>
+            <p>Tables · Modal · dense status rows · application shell</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const root = document.documentElement;
+      const body = document.body;
+      const themeToggle = document.querySelector("#theme-toggle");
+      const themeLabel = themeToggle?.querySelector("[data-theme-label]");
+      const gestureButtons = document.querySelectorAll("[data-gesture-option]");
+
+      themeToggle?.addEventListener("click", () => {
+        const dark = root.dataset.mTheme !== "dark";
+        root.dataset.mTheme = dark ? "dark" : "light";
+        themeToggle.setAttribute("aria-pressed", String(dark));
+        if (themeLabel) {
+          themeLabel.textContent = dark ? "Light materials" : "Dark materials";
+        }
+      });
+
+      for (const button of gestureButtons) {
+        button.addEventListener("click", () => {
+          body.dataset.mGesture = button.dataset.gestureOption;
+          for (const option of gestureButtons) {
+            option.setAttribute("aria-pressed", String(option === button));
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
