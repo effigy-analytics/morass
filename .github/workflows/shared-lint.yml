@@ -104,3 +104,27 @@ jobs:
 
       - name: Run npm audit (fail on high or critical)
         run: npm audit --audit-level=high
+
+  pre-commit:
+    name: pre-commit (managed hooks)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v6
+        with:
+          persist-credentials: false
+      - name: Detect config
+        id: cfg
+        run: |
+          if [ -f .pre-commit-config.yaml ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "No .pre-commit-config.yaml — skipping." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Run managed pre-commit hooks
+        if: steps.cfg.outputs.present == 'true'
+        env:
+          SKIP: eslint,prettier
+        run: |
+          pipx run pre-commit run --all-files --show-diff-on-failure
