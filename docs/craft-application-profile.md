@@ -13,8 +13,8 @@ This is guidance for the supported 0.7.1 contract. It does not add a package
 export, component, named theme, or release. The
 [public contract](public-contract.md) remains authoritative when this profile
 and an older design-direction document differ. This phase is limited to the
-hub and Awards; TumbleTime native and Deposition/Scry presentation stay outside
-its scope.
+hub and Awards; TumbleTime native and game presentation stay outside its
+scope.
 
 ## Start from the exact public contract
 
