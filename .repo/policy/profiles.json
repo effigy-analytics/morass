@@ -1,0 +1,1518 @@
+{
+  "schema_version": 1,
+  "common_controls": [
+    {
+      "id": "common.agents",
+      "kind": "file",
+      "applicability": {
+        "lifecycles": [
+          "active",
+          "maintenance",
+          "experimental",
+          "frozen",
+          "retired"
+        ],
+        "condition": "always"
+      },
+      "expected": {
+        "paths": [
+          "AGENTS.md"
+        ],
+        "match": "any"
+      }
+    },
+    {
+      "id": "common.dependabot",
+      "kind": "file",
+      "applicability": {
+        "lifecycles": [
+          "active",
+          "maintenance",
+          "experimental",
+          "frozen",
+          "retired"
+        ],
+        "condition": "always"
+      },
+      "expected": {
+        "paths": [
+          ".github/dependabot.yml"
+        ],
+        "match": "any"
+      }
+    },
+    {
+      "id": "common.security-guidance",
+      "kind": "file",
+      "applicability": {
+        "lifecycles": [
+          "active",
+          "maintenance",
+          "experimental",
+          "frozen",
+          "retired"
+        ],
+        "condition": "always"
+      },
+      "expected": {
+        "paths": [
+          "SECURITY.md",
+          ".github/SECURITY.md"
+        ],
+        "match": "any"
+      }
+    },
+    {
+      "id": "common.contribution-guidance",
+      "kind": "file",
+      "applicability": {
+        "lifecycles": [
+          "active",
+          "maintenance",
+          "experimental",
+          "frozen",
+          "retired"
+        ],
+        "condition": "always"
+      },
+      "expected": {
+        "paths": [
+          "CONTRIBUTING.md",
+          ".github/CONTRIBUTING.md"
+        ],
+        "match": "any"
+      }
+    },
+    {
+      "id": "common.review-routing",
+      "kind": "file",
+      "applicability": {
+        "lifecycles": [
+          "active",
+          "maintenance",
+          "experimental",
+          "frozen",
+          "retired"
+        ],
+        "condition": "always"
+      },
+      "expected": {
+        "paths": [
+          "CODEOWNERS",
+          ".github/CODEOWNERS",
+          "docs/CODEOWNERS"
+        ],
+        "match": "any"
+      }
+    },
+    {
+      "id": "common.ownership",
+      "kind": "manual_evidence",
+      "applicability": {
+        "lifecycles": [
+          "active",
+          "maintenance",
+          "experimental",
+          "frozen",
+          "retired"
+        ],
+        "condition": "always"
+      },
+      "expected": {
+        "requirement": "Contract owner and ownership decision source are explicit."
+      }
+    },
+    {
+      "id": "common.runtime-source",
+      "kind": "runtime_source",
+      "applicability": {
+        "lifecycles": [
+          "active",
+          "maintenance",
+          "experimental",
+          "frozen",
+          "retired"
+        ],
+        "condition": "always"
+      },
+      "expected": {
+        "required": true
+      }
+    },
+    {
+      "id": "common.ci-evidence",
+      "kind": "ci_context",
+      "applicability": {
+        "lifecycles": [
+          "active",
+          "maintenance",
+          "experimental",
+          "frozen",
+          "retired"
+        ],
+        "condition": "always"
+      },
+      "expected": {
+        "commands": [
+          "check"
+        ]
+      }
+    },
+    {
+      "id": "common.workflow-permissions",
+      "kind": "workflow_policy",
+      "applicability": {
+        "lifecycles": [
+          "active",
+          "maintenance",
+          "experimental",
+          "frozen",
+          "retired"
+        ],
+        "condition": "always"
+      },
+      "expected": {
+        "policy": "read_only_permissions"
+      }
+    },
+    {
+      "id": "common.action-pins",
+      "kind": "workflow_policy",
+      "applicability": {
+        "lifecycles": [
+          "active",
+          "maintenance",
+          "experimental",
+          "frozen",
+          "retired"
+        ],
+        "condition": "always"
+      },
+      "expected": {
+        "policy": "reviewed_action_shas"
+      }
+    },
+    {
+      "id": "common.shared-workflows",
+      "kind": "workflow_policy",
+      "applicability": {
+        "lifecycles": [
+          "active",
+          "maintenance",
+          "experimental",
+          "frozen",
+          "retired"
+        ],
+        "condition": "always"
+      },
+      "expected": {
+        "policy": "reviewed_shared_workflows"
+      }
+    },
+    {
+      "id": "common.security-scan",
+      "kind": "workflow_policy",
+      "applicability": {
+        "lifecycles": [
+          "active",
+          "maintenance",
+          "experimental",
+          "frozen",
+          "retired"
+        ],
+        "condition": "always"
+      },
+      "expected": {
+        "policy": "security_scan"
+      }
+    }
+  ],
+  "profiles": {
+    "operations": [
+      {
+        "id": "operations.lint",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "lint"
+        }
+      },
+      {
+        "id": "operations.test",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "test"
+        }
+      },
+      {
+        "id": "operations.check",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "check"
+        }
+      },
+      {
+        "id": "operations.ci",
+        "kind": "ci_context",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "commands": [
+            "lint",
+            "test",
+            "check"
+          ]
+        }
+      },
+      {
+        "id": "operations.configuration-tests",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Offline behavior/configuration tests exercise automation rather than merely parsing it."
+        }
+      },
+      {
+        "id": "operations.effect-restore",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "live_automation"
+        },
+        "expected": {
+          "requirement": "Live automation has effect and recovery/restore evidence."
+        }
+      }
+    ],
+    "python-library": [
+      {
+        "id": "python-library.lint",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "lint"
+        }
+      },
+      {
+        "id": "python-library.test",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "test"
+        }
+      },
+      {
+        "id": "python-library.check",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "check"
+        }
+      },
+      {
+        "id": "python-library.typecheck",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "typecheck"
+        }
+      },
+      {
+        "id": "python-library.build",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "build"
+        }
+      },
+      {
+        "id": "python-library.ci",
+        "kind": "ci_context",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "commands": [
+            "lint",
+            "test",
+            "check",
+            "typecheck",
+            "build"
+          ]
+        }
+      },
+      {
+        "id": "python-library.dependency-audit",
+        "kind": "workflow_policy",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "policy": "dependency_audit"
+        }
+      },
+      {
+        "id": "python-library.static-analysis",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Actual mypy/Pyright or established static checking is evidenced; configuration alone does not prove execution."
+        }
+      },
+      {
+        "id": "python-library.package-smoke",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Wheel or deployed-package smoke verifies an installed/deployed artifact."
+        }
+      },
+      {
+        "id": "python-library.boundary-tests",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Unit and boundary tests verify behavior with the existing coverage floor."
+        }
+      }
+    ],
+    "python-service": [
+      {
+        "id": "python-service.lint",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "lint"
+        }
+      },
+      {
+        "id": "python-service.test",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "test"
+        }
+      },
+      {
+        "id": "python-service.check",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "check"
+        }
+      },
+      {
+        "id": "python-service.typecheck",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "typecheck"
+        }
+      },
+      {
+        "id": "python-service.build",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "build"
+        }
+      },
+      {
+        "id": "python-service.ci",
+        "kind": "ci_context",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "commands": [
+            "lint",
+            "test",
+            "check",
+            "typecheck",
+            "build"
+          ]
+        }
+      },
+      {
+        "id": "python-service.dependency-audit",
+        "kind": "workflow_policy",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "policy": "dependency_audit"
+        }
+      },
+      {
+        "id": "python-service.static-analysis",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Actual mypy/Pyright or established static checking is evidenced; configuration alone does not prove execution."
+        }
+      },
+      {
+        "id": "python-service.package-smoke",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Wheel or deployed-package smoke verifies an installed/deployed artifact."
+        }
+      },
+      {
+        "id": "python-service.boundary-tests",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Unit and boundary tests verify behavior with the existing coverage floor."
+        }
+      }
+    ],
+    "web-ts": [
+      {
+        "id": "web-ts.lint",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "lint"
+        }
+      },
+      {
+        "id": "web-ts.test",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "test"
+        }
+      },
+      {
+        "id": "web-ts.check",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "check"
+        }
+      },
+      {
+        "id": "web-ts.typecheck",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "typecheck"
+        }
+      },
+      {
+        "id": "web-ts.build",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "build"
+        }
+      },
+      {
+        "id": "web-ts.ci",
+        "kind": "ci_context",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "commands": [
+            "lint",
+            "test",
+            "check",
+            "typecheck",
+            "build"
+          ]
+        }
+      },
+      {
+        "id": "web-ts.dependency-audit",
+        "kind": "workflow_policy",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "policy": "dependency_audit"
+        }
+      },
+      {
+        "id": "web-ts.strict-types",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Strict TypeScript checking is executed."
+        }
+      },
+      {
+        "id": "web-ts.browser-flows",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "ui"
+        },
+        "expected": {
+          "requirement": "Critical browser flows are exercised where a UI exists."
+        }
+      }
+    ],
+    "ts-library": [
+      {
+        "id": "ts-library.lint",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "lint"
+        }
+      },
+      {
+        "id": "ts-library.test",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "test"
+        }
+      },
+      {
+        "id": "ts-library.check",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "check"
+        }
+      },
+      {
+        "id": "ts-library.typecheck",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "typecheck"
+        }
+      },
+      {
+        "id": "ts-library.build",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "build"
+        }
+      },
+      {
+        "id": "ts-library.ci",
+        "kind": "ci_context",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "commands": [
+            "lint",
+            "test",
+            "check",
+            "typecheck",
+            "build"
+          ]
+        }
+      },
+      {
+        "id": "ts-library.dependency-audit",
+        "kind": "workflow_policy",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "policy": "dependency_audit"
+        }
+      },
+      {
+        "id": "ts-library.strict-types",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Strict TypeScript checking is executed."
+        }
+      },
+      {
+        "id": "ts-library.browser-flows",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "ui"
+        },
+        "expected": {
+          "requirement": "Critical browser flows are exercised where a UI exists."
+        }
+      },
+      {
+        "id": "ts-library.clean-consumer",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Clean-consumer package tests exercise the installed public interface."
+        }
+      }
+    ],
+    "terraform": [
+      {
+        "id": "terraform.lint",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "lint"
+        }
+      },
+      {
+        "id": "terraform.test",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "test"
+        }
+      },
+      {
+        "id": "terraform.check",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "check"
+        }
+      },
+      {
+        "id": "terraform.typecheck",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "typecheck"
+        }
+      },
+      {
+        "id": "terraform.build",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "build"
+        }
+      },
+      {
+        "id": "terraform.ci",
+        "kind": "ci_context",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "commands": [
+            "lint",
+            "test",
+            "check",
+            "typecheck",
+            "build"
+          ]
+        }
+      },
+      {
+        "id": "terraform.validation",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Formatting, backend-free validate, TFLint and applicable security checks are evidenced."
+        }
+      },
+      {
+        "id": "terraform.delivery",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Privileged plan/apply remains separately reviewed; runbook and recovery procedure are recorded."
+        }
+      }
+    ],
+    "lua-love": [
+      {
+        "id": "lua-love.lint",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "lint"
+        }
+      },
+      {
+        "id": "lua-love.test",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "test"
+        }
+      },
+      {
+        "id": "lua-love.check",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "check"
+        }
+      },
+      {
+        "id": "lua-love.typecheck",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "typecheck"
+        }
+      },
+      {
+        "id": "lua-love.build",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "build"
+        }
+      },
+      {
+        "id": "lua-love.ci",
+        "kind": "ci_context",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "commands": [
+            "lint",
+            "test",
+            "check",
+            "typecheck",
+            "build"
+          ]
+        }
+      },
+      {
+        "id": "lua-love.static-analysis",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Declare and exercise the Lua static-analysis baseline."
+        }
+      },
+      {
+        "id": "lua-love.deterministic-tests",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Deterministic behavior tests are executed."
+        }
+      },
+      {
+        "id": "lua-love.runtime-smoke",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Package/runtime smoke exercises the delivered game."
+        }
+      },
+      {
+        "id": "lua-love.acceptance",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "presentation_change"
+        },
+        "expected": {
+          "requirement": "Relevant presentation/gameplay changes require recorded manual acceptance."
+        }
+      }
+    ],
+    "godot": [
+      {
+        "id": "godot.lint",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "lint"
+        }
+      },
+      {
+        "id": "godot.test",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "test"
+        }
+      },
+      {
+        "id": "godot.check",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "check"
+        }
+      },
+      {
+        "id": "godot.typecheck",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "typecheck"
+        }
+      },
+      {
+        "id": "godot.build",
+        "kind": "command",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "key": "build"
+        }
+      },
+      {
+        "id": "godot.ci",
+        "kind": "ci_context",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "commands": [
+            "lint",
+            "test",
+            "check",
+            "typecheck",
+            "build"
+          ]
+        }
+      },
+      {
+        "id": "godot.diagnostics",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "GDScript lint/format and typing/import diagnostics are executed."
+        }
+      },
+      {
+        "id": "godot.headless-tests",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Headless behavior tests are executed."
+        }
+      },
+      {
+        "id": "godot.export-smoke",
+        "kind": "manual_evidence",
+        "applicability": {
+          "lifecycles": [
+            "active",
+            "maintenance",
+            "experimental",
+            "frozen",
+            "retired"
+          ],
+          "condition": "always"
+        },
+        "expected": {
+          "requirement": "Export/runtime smoke exercises the exported artifact."
+        }
+      }
+    ]
+  }
+}

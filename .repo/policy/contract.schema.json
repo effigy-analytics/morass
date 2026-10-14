@@ -1,0 +1,444 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contract.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "repository": {
+      "type": "string",
+      "pattern": "^effigy-analytics/[A-Za-z0-9_.-]+$"
+    },
+    "owner": {
+      "type": "object",
+      "properties": {
+        "handle": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "handle",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "lifecycle": {
+      "enum": [
+        "active",
+        "maintenance",
+        "experimental",
+        "frozen",
+        "retired"
+      ]
+    },
+    "business_line": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "name",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "risk_tier": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "enum": [
+            "low",
+            "moderate",
+            "high"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "level",
+        "rationale",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "operations",
+          "python-library",
+          "python-service",
+          "web-ts",
+          "ts-library",
+          "terraform",
+          "lua-love",
+          "godot"
+        ]
+      }
+    },
+    "runtimes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "supported": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(?!/)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$))(?!.*//)(?!.*[\\x00-\\x20:])[^/]+(?:/[^/]+)*$"
+          }
+        },
+        "required": [
+          "tool",
+          "supported",
+          "source"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "commands": {
+      "type": "object",
+      "properties": {
+        "bootstrap": {
+          "$ref": "#/$defs/command"
+        },
+        "format": {
+          "$ref": "#/$defs/command"
+        },
+        "lint": {
+          "$ref": "#/$defs/command"
+        },
+        "typecheck": {
+          "$ref": "#/$defs/command"
+        },
+        "test": {
+          "$ref": "#/$defs/command"
+        },
+        "build": {
+          "$ref": "#/$defs/command"
+        },
+        "check": {
+          "$ref": "#/$defs/command"
+        }
+      },
+      "required": [
+        "bootstrap",
+        "format",
+        "lint",
+        "typecheck",
+        "test",
+        "build",
+        "check"
+      ],
+      "additionalProperties": false
+    },
+    "ci": {
+      "type": "object",
+      "properties": {
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ref": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "workflows": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!/)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$))(?!.*//)(?!.*[\\x00-\\x20:])[^/]+(?:/[^/]+)*$"
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "required_contexts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
+                    },
+                    "app_id": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "ref",
+              "workflows",
+              "required_contexts"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "command_evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "workflow": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^(?!/)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$))(?!.*//)(?!.*[\\x00-\\x20:])[^/]+(?:/[^/]+)*$"
+              },
+              "job": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "command": {
+                "enum": [
+                  "bootstrap",
+                  "format",
+                  "lint",
+                  "typecheck",
+                  "test",
+                  "build",
+                  "check"
+                ]
+              }
+            },
+            "required": [
+              "workflow",
+              "job",
+              "command"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "refs",
+        "command_evidence"
+      ],
+      "additionalProperties": false
+    },
+    "delivery": {
+      "type": "object",
+      "properties": {
+        "integration_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "pr_policy": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "deployment_mode": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "runbook": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "recovery": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "integration_refs",
+        "pr_policy",
+        "deployment_mode",
+        "runbook",
+        "recovery"
+      ],
+      "additionalProperties": false
+    },
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "control": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "ref_or_path": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "decision": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "approval": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "utc-date-time"
+          }
+        },
+        "required": [
+          "control",
+          "ref_or_path",
+          "reason",
+          "owner",
+          "decision",
+          "approval",
+          "expires_at"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "repository",
+    "owner",
+    "lifecycle",
+    "business_line",
+    "risk_tier",
+    "profiles",
+    "runtimes",
+    "commands",
+    "ci",
+    "delivery",
+    "exceptions"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "command": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "applicable"
+            },
+            "cwd": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!/)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$))(?!.*//)(?!.*[\\x00-\\x20:])[^/]+(?:/[^/]+)*$"
+                },
+                {
+                  "const": "."
+                }
+              ]
+            },
+            "run": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          },
+          "required": [
+            "status",
+            "cwd",
+            "run"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "not_applicable"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          },
+          "required": [
+            "status",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

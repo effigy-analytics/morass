@@ -1,0 +1,363 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "profiles.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "common_controls": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/control"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "profiles": {
+      "type": "object",
+      "properties": {
+        "operations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/control"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "python-library": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/control"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "python-service": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/control"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "web-ts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/control"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "ts-library": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/control"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "terraform": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/control"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "lua-love": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/control"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "godot": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/control"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "operations",
+        "python-library",
+        "python-service",
+        "web-ts",
+        "ts-library",
+        "terraform",
+        "lua-love",
+        "godot"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "common_controls",
+    "profiles"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "control": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_.-]+$"
+        },
+        "kind": {
+          "enum": [
+            "file",
+            "command",
+            "runtime_source",
+            "ci_context",
+            "workflow_policy",
+            "manual_evidence"
+          ]
+        },
+        "applicability": {
+          "type": "object",
+          "properties": {
+            "lifecycles": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "active",
+                  "maintenance",
+                  "experimental",
+                  "frozen",
+                  "retired"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "condition": {
+              "enum": [
+                "always",
+                "ui",
+                "live_automation",
+                "presentation_change"
+              ]
+            }
+          },
+          "required": [
+            "lifecycles",
+            "condition"
+          ],
+          "additionalProperties": false
+        },
+        "expected": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "applicability",
+        "expected"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "file"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "expected": {
+                "type": "object",
+                "properties": {
+                  "paths": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^(?!/)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$))(?!.*//)(?!.*[\\x00-\\x20:])[^/]+(?:/[^/]+)*$"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  },
+                  "match": {
+                    "enum": [
+                      "all",
+                      "any"
+                    ]
+                  }
+                },
+                "required": [
+                  "paths",
+                  "match"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "command"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "expected": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "enum": [
+                      "bootstrap",
+                      "format",
+                      "lint",
+                      "typecheck",
+                      "test",
+                      "build",
+                      "check"
+                    ]
+                  }
+                },
+                "required": [
+                  "key"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "runtime_source"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "expected": {
+                "type": "object",
+                "properties": {
+                  "required": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "required"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "ci_context"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "expected": {
+                "type": "object",
+                "properties": {
+                  "commands": {
+                    "type": "array",
+                    "items": {
+                      "enum": [
+                        "bootstrap",
+                        "format",
+                        "lint",
+                        "typecheck",
+                        "test",
+                        "build",
+                        "check"
+                      ]
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "commands"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "workflow_policy"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "expected": {
+                "type": "object",
+                "properties": {
+                  "policy": {
+                    "enum": [
+                      "read_only_permissions",
+                      "reviewed_action_shas",
+                      "reviewed_shared_workflows",
+                      "security_scan",
+                      "dependency_audit"
+                    ]
+                  }
+                },
+                "required": [
+                  "policy"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "manual_evidence"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "expected": {
+                "type": "object",
+                "properties": {
+                  "requirement": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S"
+                  }
+                },
+                "required": [
+                  "requirement"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
