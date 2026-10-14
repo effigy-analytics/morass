@@ -1,0 +1,11 @@
+{
+  "commit": "f935d8e64c20b8fe246a98d2c694c7792a5410c7",
+  "files": {
+    "contract.schema.json": "bdec18704d67ccf345f0262957fb63ceb40b62579ec8c8e74e5a9faffca3c602",
+    "policy-lock.schema.json": "9665f4412cc759d9201b91c6c77c7e4cbb64a7bddd5c35a47073918b8dc17fdf",
+    "profiles.json": "f29f5e6a8be140a72f4f6c5f060524893d93f9929e53442547b024c6c27b360f",
+    "profiles.schema.json": "7060f6a6db803c391353bc0742be1c94bed8b0043708a0b0dadaca13cb774996"
+  },
+  "repository": "effigy-analytics/effigy-analytics-umbrella",
+  "schema_version": 1
+}

@@ -1,1 +1,6 @@
 .superpowers/
+# Immutable upstream policy bytes; checked against .repo/policy.lock.json.
+.repo/policy/contract.schema.json
+.repo/policy/profiles.schema.json
+.repo/policy/policy-lock.schema.json
+.repo/policy/profiles.json

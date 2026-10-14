@@ -40,15 +40,16 @@
   },
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run integrity:check && npm run pack:check",
+    "check": "npm run contract:check && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run integrity:check && npm run pack:check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "install:check": "node scripts/verify-install.mjs",
     "integrity:check": "node scripts/check-release-integrity.mjs",
     "lint": "eslint .",
     "pack:check": "npm_config_cache=${TMPDIR:-/tmp}/morass-npm-cache npm pack --dry-run",
-    "test": "vitest run",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "test": "vitest run --exclude scripts/check-repo-contract.test.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "contract:check": "node scripts/check-repo-contract.mjs && node --test scripts/check-repo-contract.test.mjs"
   },
   "peerDependencies": {
     "react": "^18.2.0 || ^19.0.0",
@@ -62,9 +63,11 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^6.0.3",
+    "ajv": "8.20.0",
     "eslint": "^10.6.0",
     "globals": "^17.7.0",
     "jsdom": "^29.1.1",
+    "jsonc-parser": "3.3.1",
     "prettier": "^3.9.4",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.62.1",

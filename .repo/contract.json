@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "repository": "effigy-analytics/morass",
+  "owner": {
+    "handle": "effigy-analytics",
+    "source": ".repo/README.md#declaration-authority"
+  },
+  "lifecycle": "active",
+  "business_line": {
+    "name": "Reusable React UI foundation",
+    "source": "AGENTS.md"
+  },
+  "risk_tier": {
+    "level": "moderate",
+    "rationale": "Proposed: public npm UI primitives can affect downstream consumer interfaces; strict types, integrity and clean-consumer gates constrain delivery risk.",
+    "source": ".repo/README.md#declaration-authority"
+  },
+  "profiles": ["ts-library"],
+  "runtimes": [
+    {
+      "tool": "node",
+      "supported": "24.15.0",
+      "source": ".nvmrc"
+    }
+  ],
+  "commands": {
+    "bootstrap": {
+      "status": "applicable",
+      "cwd": ".",
+      "run": "npm ci"
+    },
+    "format": {
+      "status": "applicable",
+      "cwd": ".",
+      "run": "npm run format"
+    },
+    "lint": {
+      "status": "applicable",
+      "cwd": ".",
+      "run": "npm run lint"
+    },
+    "typecheck": {
+      "status": "applicable",
+      "cwd": ".",
+      "run": "npm run typecheck"
+    },
+    "test": {
+      "status": "applicable",
+      "cwd": ".",
+      "run": "npm run test"
+    },
+    "build": {
+      "status": "applicable",
+      "cwd": ".",
+      "run": "npm run build"
+    },
+    "check": {
+      "status": "applicable",
+      "cwd": ".",
+      "run": "npm run check"
+    }
+  },
+  "ci": {
+    "refs": [
+      {
+        "ref": "main",
+        "workflows": [
+          ".github/workflows/ci.yml",
+          ".github/workflows/shared-lint.yml",
+          ".github/workflows/codeql.yml"
+        ],
+        "required_contexts": [
+          {
+            "name": "verify"
+          },
+          {
+            "name": "Consumer / React 18.2.0"
+          },
+          {
+            "name": "Consumer / React 19.2.7"
+          },
+          {
+            "name": "Consumer compatibility gate"
+          },
+          {
+            "name": "Lint GitHub Actions Workflows"
+          },
+          {
+            "name": "GitHub Actions Security Lint"
+          },
+          {
+            "name": "Terraform Security Scan"
+          },
+          {
+            "name": "Secret Scan (gitleaks)"
+          },
+          {
+            "name": "npm Audit (high+)"
+          },
+          {
+            "name": "analyze"
+          }
+        ]
+      }
+    ],
+    "command_evidence": [
+      {
+        "workflow": ".github/workflows/ci.yml",
+        "job": "verify",
+        "command": "bootstrap"
+      },
+      {
+        "workflow": ".github/workflows/ci.yml",
+        "job": "verify",
+        "command": "check"
+      }
+    ]
+  },
+  "delivery": {
+    "integration_refs": ["main"],
+    "pr_policy": "Proposed integration declaration: reviewed PR with npm run check and existing CI/consumer/security contexts; this contract does not attest live branch protection.",
+    "deployment_mode": "Public npmjs canonical tarball with byte-identical GitHub Packages mirror; existing release workflow only.",
+    "runbook": ".github/workflows/publish.yml; scripts/check-release-integrity.mjs; scripts/verify-install.mjs; scripts/verify-registry-artifact.mjs",
+    "recovery": "Proposed: revert an unreleased repository-contract change via reviewed PR; restore the previous reviewed contract/data/lock together. Published-version recovery remains under existing release authority."
+  },
+  "exceptions": []
+}
