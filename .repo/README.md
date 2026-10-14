@@ -11,12 +11,13 @@ this validator never grants waivers. Morass currently declares no exceptions.
 
 ## Declaration authority
 
-- The proposed owner handle `effigy-analytics` follows the organization named by
-  `package.json` author and repository URL. This is context for review, not an
-  approved GitHub team, ownership decision, or access attestation.
+- Kevin (`kevinBlum`) is the accountable owner, accepted by the maintainer on
+  2026-10-14. This records responsibility; acceptance does not attest repository
+  write access, live enforcement or release authority. Organization metadata in
+  `package.json` does not determine accountable responsibility.
 - The UI foundation business line follows `AGENTS.md`, `README.md`, and the public
   package description. `ts-library` matches the typed public React package.
-- The moderate risk tier is an explicit proposal: changes can affect public npm
+- The moderate risk declaration reflects changes that can affect public npm
   consumers. Strict TypeScript (`tsconfig.json`), component and interface tests,
   release integrity, tarball allowlisting, and clean consumer checks inform it.
   No private portfolio decision or risk approval is claimed.
@@ -46,9 +47,10 @@ this validator never grants waivers. Morass currently declares no exceptions.
 
 Source: `effigy-analytics/effigy-analytics-umbrella`, reviewed commit
 `f935d8e64c20b8fe246a98d2c694c7792a5410c7`. This reviewed merged source is
-available to consumers; source availability does not adopt default policy.
-Consumer contract and default adoption remain proposals pending authorized
-merges and fresh collection. Only the contract, profiles, and policy-lock schemas,
+available to consumers. As observed on 2026-10-14, `main` at
+`f154aebc02de33c64cac04275342f56fe9fc9ddb` contains the existing consumer
+contract and pin. This owner alignment retains that pin; dated source adoption
+does not establish current fleet health. Only the contract, profiles, and policy-lock schemas,
 `profiles.json`, and their generated digest lock are bundled. Private catalog,
 inventory, and decision data are neither required nor shipped.
 
@@ -65,8 +67,9 @@ precision, invalid UTC calendar dates, and nonlocal schema references fail close
 Errors omit document values, paths, and command contents. Schema references are
 checked in schema positions, leaving instance-valued `const`/`enum` data opaque.
 
-Replace contract, public data, and lock together only from an exact reviewed
-source commit. Revert all three together to restore a previous reviewed pin.
+When advancing the policy source, replace contract, public data, and lock together
+from an exact reviewed source commit. Declaration-only changes retain the reviewed
+policy bytes and lock. Revert the complete policy update to restore a previous reviewed pin.
 The copies do not automatically synchronize. `package.json`'s existing package
 file allowlist excludes `.repo/` and scripts from the published tarball; public
 exports, product code, CSS classes, and custom properties are unchanged.

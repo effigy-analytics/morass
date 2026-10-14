@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repository": "effigy-analytics/morass",
   "owner": {
-    "handle": "effigy-analytics",
+    "handle": "kevinBlum",
     "source": ".repo/README.md#declaration-authority"
   },
   "lifecycle": "active",
@@ -12,7 +12,7 @@
   },
   "risk_tier": {
     "level": "moderate",
-    "rationale": "Proposed: public npm UI primitives can affect downstream consumer interfaces; strict types, integrity and clean-consumer gates constrain delivery risk.",
+    "rationale": "Public npm UI primitives can affect downstream consumer interfaces; strict types, integrity and clean-consumer gates constrain delivery risk.",
     "source": ".repo/README.md#declaration-authority"
   },
   "profiles": ["ts-library"],
