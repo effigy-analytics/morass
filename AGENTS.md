@@ -11,7 +11,8 @@ Morass is the reusable UI foundation intended to serve Webbery first and become 
   and release boundary. `npm run contract:check` validates it and the bundled
   policy offline; it never runs declared commands or retrieves schemas.
 - Keep `.repo/policy/` byte-identical to its reviewed source and digest lock.
-  The pin is an immutable branch preview, not adopted default fleet policy.
+  The pin uses reviewed merged source; source availability is not default fleet
+  policy adoption or current fleet health.
   Update the contract, public policy data, and lock together through review.
 - Owner and risk declarations are proposals with sources in `.repo/README.md`,
   not proof of approved ownership, access, live enforcement, or waivers. Preserve

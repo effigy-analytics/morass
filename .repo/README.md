@@ -45,8 +45,10 @@ this validator never grants waivers. Morass currently declares no exceptions.
 ## Immutable public policy
 
 Source: `effigy-analytics/effigy-analytics-umbrella`, reviewed commit
-`fa732d8f0f0482058f223103a1bab32f967764cf`. This is an immutable branch preview,
-not adopted default policy. Only the contract, profiles, and policy-lock schemas,
+`f935d8e64c20b8fe246a98d2c694c7792a5410c7`. This reviewed merged source is
+available to consumers; source availability does not adopt default policy.
+Consumer contract and default adoption remain proposals pending authorized
+merges and fresh collection. Only the contract, profiles, and policy-lock schemas,
 `profiles.json`, and their generated digest lock are bundled. Private catalog,
 inventory, and decision data are neither required nor shipped.
 
