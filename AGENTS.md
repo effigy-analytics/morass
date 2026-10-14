@@ -13,7 +13,9 @@ Morass is the reusable UI foundation intended to serve Webbery first and become 
 - Keep `.repo/policy/` byte-identical to its reviewed source and digest lock.
   The pin uses reviewed merged source; source availability is not default fleet
   policy adoption or current fleet health.
-  Update the contract, public policy data, and lock together through review.
-- Owner and risk declarations are proposals with sources in `.repo/README.md`,
-  not proof of approved ownership, access, live enforcement, or waivers. Preserve
+  Policy-source upgrades update the contract, public policy data, and lock together
+  through review; declaration-only edits retain the existing policy pin.
+- Kevin (`kevinBlum`) is the accepted accountable owner, with a local declaration
+  in `.repo/README.md`. Responsibility does not attest repository access, live
+  enforcement or waivers. Preserve
   the vendored public lint workflow and its July 7 ADR explanation.
