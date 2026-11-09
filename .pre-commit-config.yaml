@@ -37,7 +37,7 @@ repos:
         # (SHELLCHECK_OPTS=--severity=warning).
         args: [-ignore, "SC[0-9]+:(info|style):"]
   - repo: https://github.com/zizmorcore/zizmor-pre-commit
-    rev: v1.23.1
+    rev: v1.31.1
     hooks:
       - id: zizmor
         # Same thresholds as shared-lint's zizmor job.
