@@ -1,0 +1,84 @@
+# morass pre-commit hooks. Install once with `pre-commit install`
+# (installs the pre-commit and pre-push tiers; see default_install_hook_types).
+#
+# Composed from the umbrella canonical standard
+# (effigy-analytics-umbrella docs/standards/pre-commit/): base.yaml (with the
+# actionlint/zizmor block, since .github/workflows/ exists) + js-ts.yaml.
+# Revs are pinned exactly as there; bump them there first.
+#
+# The vendored Shared Lint pre-commit job (once #48 lands) runs this file
+# with --all-files and SKIP=eslint,prettier, so every other pre-commit-stage
+# hook here must pass on a bare ubuntu runner. Pre-push hooks never run there;
+# CI's `npm run check` job enforces them.
+default_install_hook_types: [pre-commit, pre-push]
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      # Keep Markdown hard line breaks (two trailing spaces): stripping them
+      # changes how the rendered doc reads, so it isn't a mechanical fix.
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      - id: check-yaml
+      - id: check-json
+        exclude: (^|/)tsconfig.*\.json$
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks:
+      - id: gitleaks
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.11
+    hooks:
+      - id: actionlint
+        # Same threshold as shared-lint's actionlint job
+        # (SHELLCHECK_OPTS=--severity=warning).
+        args: [-ignore, "SC[0-9]+:(info|style):"]
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: v1.23.1
+    hooks:
+      - id: zizmor
+        # Same thresholds as shared-lint's zizmor job.
+        args: [--min-severity, medium, --min-confidence, high]
+  - repo: local
+    hooks:
+      # eslint/prettier run through the repo's own npm scripts and configs
+      # (eslint.config.js, prettier defaults + .prettierignore) and the
+      # repo-pinned versions in node_modules. `prettier --check .` covers
+      # markdown/json/yaml/html too, so the trigger types include them.
+      - id: eslint
+        name: eslint
+        entry: scripts/hooks/npm-script.sh lint
+        language: system
+        types_or: [javascript, jsx, ts, tsx]
+        pass_filenames: false
+      - id: prettier
+        name: prettier
+        entry: scripts/hooks/npm-script.sh format:check
+        language: system
+        types_or: [javascript, jsx, ts, tsx, css, markdown, json, yaml, html]
+        pass_filenames: false
+      # Guard: public @effigy-analytics packages (morass) install from npmjs, not
+      # GitHub Packages. A lockfile pinned to GH Packages depends on an expiring
+      # PAT and eventually breaks CI/CD (see STANDARDS.md). Regenerate the lockfile
+      # after removing the @effigy-analytics:registry scope override from .npmrc.
+      - id: public-pkg-from-npmjs
+        name: public @effigy-analytics packages install from npmjs (not GitHub Packages)
+        entry: bash -c 'grep -Eq "npm[.]pkg[.]github[.]com/download/@effigy-analytics/morass" package-lock.json 2>/dev/null && { echo "package-lock.json resolves @effigy-analytics/morass from GitHub Packages; it is public on npmjs. Remove the @effigy-analytics:registry override from .npmrc and regenerate the lockfile."; exit 1; } || exit 0'
+        language: system
+        files: ^package-lock\.json$
+        pass_filenames: false
+      # Pre-push tier: typecheck + tests + build (the slow half of
+      # `npm run check`), so the pre-commit stage stays well under 20 s.
+      # Runs only when the pushed range touches code or build inputs, and
+      # prints its runtime. CI's `npm run check` still enforces all of it.
+      - id: typecheck-test-build
+        name: typecheck + test + build (pre-push)
+        entry: scripts/hooks/npm-script.sh typecheck test build
+        language: system
+        files: ^(src|scripts)/|^(package(-lock)?\.json|tsconfig(\.build)?\.json|vite\.config\.ts|\.nvmrc)$
+        pass_filenames: false
+        stages: [pre-push]
+        verbose: true
