@@ -173,6 +173,221 @@ it("guarantees AA on every felt fill in light and dark", () => {
   }
 });
 
+describe("validateTheme with declared semantic pairs", () => {
+  const appTokens = {
+    "--app-accent": "#1f5f8b",
+    "--app-accent-on-surface": "#173a4a",
+    "--app-note-surface": "#fff4c2",
+  };
+  const appTheme = { ...themes.light, ...appTokens };
+
+  it("is backward compatible when no options are given", () => {
+    expect(validateTheme(themes.light)).toEqual(
+      validateTheme(themes.light, {}),
+    );
+    expect(validateTheme(themes.light, { pairs: [] })).toEqual(
+      validateTheme(themes.light),
+    );
+  });
+
+  it("passes a custom pair that meets AA on its declared surface", () => {
+    const result = validateTheme(appTheme, {
+      pairs: [
+        {
+          bg: ["--app-note-surface"],
+          context: "accent text on note surface",
+          fg: "--app-accent-on-surface",
+        },
+      ],
+    });
+    expect(result.failures).toEqual([]);
+    expect(result.ok).toBe(true);
+  });
+
+  it("reports a failing custom pair with its tokens, context and ratio", () => {
+    const result = validateTheme(
+      { ...appTheme, "--app-accent": "#9c9884" },
+      {
+        pairs: [
+          {
+            bg: ["--app-note-surface"],
+            context: "accent on note surface",
+            fg: "--app-accent",
+          },
+        ],
+      },
+    );
+    expect(result.ok).toBe(false);
+    expect(result.failures).toHaveLength(1);
+    const [failure] = result.failures;
+    expect(failure.fg).toBe("--app-accent");
+    expect(failure.bg).toEqual(["--app-note-surface"]);
+    expect(failure.context).toBe("accent on note surface");
+    expect(failure.required).toBe(4.5);
+    expect(failure.ratio).toBeLessThan(4.5);
+  });
+
+  it("checks the same fg against each surface independently", () => {
+    const result = validateTheme(
+      { ...appTheme, "--app-dark-surface": "#173a4a" },
+      {
+        pairs: [
+          {
+            bg: ["--app-note-surface"],
+            context: "on light note",
+            fg: "--app-accent-on-surface",
+          },
+          {
+            bg: ["--app-dark-surface"],
+            context: "on dark note",
+            fg: "--app-accent-on-surface",
+          },
+        ],
+      },
+    );
+    expect(result.failures.map((failure) => failure.context)).toEqual([
+      "on dark note",
+    ]);
+  });
+
+  it("honors a per-pair required ratio", () => {
+    const pair = {
+      bg: ["--app-note-surface"],
+      context: "non-text accent",
+      fg: "--app-accent",
+    } as const;
+    expect(
+      validateTheme(appTheme, { pairs: [{ ...pair, required: 3 }] }).ok,
+    ).toBe(true);
+    const strict = validateTheme(appTheme, {
+      pairs: [{ ...pair, required: 12 }],
+    });
+    expect(strict.failures[0]?.required).toBe(12);
+  });
+
+  it("composites alpha surfaces over the declared chain", () => {
+    const theme = {
+      ...appTheme,
+      "--app-tint": "rgb(0 0 0 / 0.5)",
+      "--app-tint-text": "#ffffff",
+      "--app-black": "#000000",
+    };
+    const chain = (bg: [`--${string}`, ...`--${string}`[]]) =>
+      validateTheme(theme, {
+        pairs: [{ bg, context: "tint", fg: "--app-tint-text" }],
+      });
+    // white on 50% black over white (#808080) is ~3.9:1; over bare black it is 21:1.
+    expect(chain(["--app-tint", "--m-color-bg"]).ok).toBe(false);
+    expect(chain(["--app-tint", "--app-black"]).ok).toBe(true);
+    expect(
+      chain(["--app-tint", "--m-color-bg"]).failures[0]?.ratio,
+    ).toBeGreaterThan(3.5);
+  });
+
+  it("reports built-in failures before custom failures", () => {
+    const result = validateTheme(
+      {
+        ...appTheme,
+        "--m-color-primary": "#5bb89c",
+        "--app-accent": "#9c9884",
+      },
+      {
+        pairs: [
+          {
+            bg: ["--app-note-surface"],
+            context: "accent on note surface",
+            fg: "--app-accent",
+          },
+        ],
+      },
+    );
+    const contexts = result.failures.map((failure) => failure.context);
+    expect(contexts.length).toBeGreaterThan(1);
+    expect(contexts[contexts.length - 1]).toBe("accent on note surface");
+    expect(contexts[0]).not.toBe("accent on note surface");
+  });
+
+  it("throws naming a custom token that is missing from the theme", () => {
+    expect(() =>
+      validateTheme(appTheme, {
+        pairs: [
+          {
+            bg: ["--app-note-surface"],
+            context: "typo",
+            fg: "--app-acent",
+          },
+        ],
+      }),
+    ).toThrow("--app-acent");
+  });
+
+  it("throws naming a custom token with an unparseable value", () => {
+    expect(() =>
+      validateTheme(
+        { ...appTheme, "--app-accent": "teal" },
+        {
+          pairs: [
+            {
+              bg: ["--app-note-surface"],
+              context: "bad value",
+              fg: "--app-accent",
+            },
+          ],
+        },
+      ),
+    ).toThrow("--app-accent");
+  });
+
+  it("throws on a pair with an empty bg chain", () => {
+    expect(() =>
+      validateTheme(appTheme, {
+        pairs: [{ bg: [], context: "no surface", fg: "--app-accent" }],
+      }),
+    ).toThrow("no surface");
+  });
+
+  it("throws on a non-finite or sub-1 required ratio", () => {
+    for (const required of [Number.NaN, 0, -3, Number.POSITIVE_INFINITY]) {
+      expect(() =>
+        validateTheme(appTheme, {
+          pairs: [
+            {
+              bg: ["--app-note-surface"],
+              context: "bad threshold",
+              fg: "--app-accent",
+              required,
+            },
+          ],
+        }),
+      ).toThrow("bad threshold");
+    }
+  });
+
+  it("returns failure bg chains that do not alias the declared pair", () => {
+    const bg: `--${string}`[] = ["--app-note-surface"];
+    const result = validateTheme(
+      { ...appTheme, "--app-accent": "#9c9884" },
+      { pairs: [{ bg, context: "alias", fg: "--app-accent" }] },
+    );
+    expect(result.failures[0]?.bg).toEqual(bg);
+    expect(result.failures[0]?.bg).not.toBe(bg);
+  });
+
+  it("does not mutate REQUIRED_PAIRS or the declared pairs", () => {
+    const before = REQUIRED_PAIRS.length;
+    const pairs = [
+      {
+        bg: ["--app-note-surface"],
+        context: "stable",
+        fg: "--app-accent-on-surface",
+      },
+    ] as const;
+    validateTheme(appTheme, { pairs });
+    expect(REQUIRED_PAIRS).toHaveLength(before);
+    expect(pairs).toHaveLength(1);
+  });
+});
+
 describe("built-in themes satisfy the contract", () => {
   it.each(["light", "dark"] as const)("%s theme validates clean", (name) => {
     const result = validateTheme(themes[name]);
