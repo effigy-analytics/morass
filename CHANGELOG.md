@@ -4,6 +4,14 @@ All notable Morass changes should be recorded here before publishing a package v
 
 ## Unreleased
 
+- Adds `CopyField`: a labelled, read-only, selectable value with a copy button.
+  It reports success through a polite live region (`role="status"`,
+  `aria-live="polite"`) and, when the Clipboard API is missing or rejects the
+  write, selects the value and shows manual-copy instructions instead of
+  failing silently. `copyLabel`, `copiedLabel`, `deniedLabel`, and `resetDelay`
+  customize the text and timing; `onCopyResult` reports `"copied"` or
+  `"denied"`. Adds the `CopyFieldProps` and `CopyFieldStatus` types and token-only
+  styling.
 - `validateTheme(theme, options?)` accepts `options.pairs`: custom semantic
   foreground/surface pairs (`SemanticPair`) that are WCAG contrast-checked
   alongside `REQUIRED_PAIRS`, so application-defined tokens are validated

@@ -1,4 +1,4 @@
-import { useEffect, useId, useInsertionEffect, useRef } from "react";
+import { useEffect, useId, useInsertionEffect, useRef, useState } from "react";
 import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
@@ -527,6 +527,130 @@ export function TextField({
           {error}
         </span>
       ) : null}
+    </div>
+  );
+}
+
+export type CopyFieldStatus = "idle" | "copied" | "denied";
+
+export interface CopyFieldProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  "children" | "onCopy"
+> {
+  /** Visible label for the read-only value. */
+  label: ReactNode;
+  /** The text shown in the field and written to the clipboard. */
+  value: string;
+  /** Button text before copying. Defaults to "Copy". */
+  copyLabel?: string;
+  /** Button and status text after a successful copy. Defaults to "Copied". */
+  copiedLabel?: string;
+  /**
+   * Status text shown when the clipboard is unavailable or refuses the write.
+   * Defaults to manual-copy instructions.
+   */
+  deniedLabel?: string;
+  /** Milliseconds before the copied state resets. Defaults to 2000. */
+  resetDelay?: number;
+  /** Called after each attempt with its outcome. */
+  onCopyResult?: (status: "copied" | "denied") => void;
+}
+
+/**
+ * A read-only, selectable value with a copy button. Success and failure are
+ * both explicit: a polite live region announces "copied", and when the
+ * Clipboard API is missing or rejects, the value is selected and the status
+ * explains how to copy it manually.
+ */
+export function CopyField({
+  className,
+  copiedLabel = "Copied",
+  copyLabel = "Copy",
+  deniedLabel = "Copy was blocked. The value is selected; press Ctrl+C or Cmd+C to copy it.",
+  label,
+  onCopyResult,
+  resetDelay = 2000,
+  value,
+  ...props
+}: CopyFieldProps): ReactElement {
+  const generatedId = useId();
+  const inputId = `m-copy-field-${generatedId}`;
+  const statusId = `${inputId}-status`;
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [status, setStatus] = useState<CopyFieldStatus>("idle");
+
+  useEffect(() => {
+    setStatus("idle");
+  }, [value]);
+
+  useEffect(() => {
+    if (status !== "copied") {
+      return undefined;
+    }
+    const timer = setTimeout(() => setStatus("idle"), resetDelay);
+    return () => clearTimeout(timer);
+  }, [status, resetDelay]);
+
+  async function copy(): Promise<void> {
+    let next: "copied" | "denied" = "denied";
+    try {
+      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+        next = "copied";
+      }
+    } catch {
+      next = "denied";
+    }
+    if (next === "denied") {
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    }
+    setStatus(next);
+    onCopyResult?.(next);
+  }
+
+  const statusText =
+    status === "copied" ? copiedLabel : status === "denied" ? deniedLabel : "";
+
+  return (
+    <div
+      {...props}
+      className={cx(
+        "m-field",
+        "m-copy-field",
+        status !== "idle" && `m-copy-field--${status}`,
+        className,
+      )}
+    >
+      <label className="m-field__label" htmlFor={inputId}>
+        {label}
+      </label>
+      <div className="m-copy-field__row">
+        <input
+          aria-describedby={statusId}
+          className="m-input m-copy-field__input"
+          id={inputId}
+          readOnly
+          ref={inputRef}
+          type="text"
+          value={value}
+        />
+        <Button onClick={() => void copy()}>
+          {status === "copied" ? copiedLabel : copyLabel}
+        </Button>
+      </div>
+      <span
+        aria-live="polite"
+        className={cx(
+          "m-field__help",
+          "m-copy-field__status",
+          status === "denied" && "m-copy-field__status--denied",
+        )}
+        id={statusId}
+        role="status"
+      >
+        {statusText}
+      </span>
     </div>
   );
 }
