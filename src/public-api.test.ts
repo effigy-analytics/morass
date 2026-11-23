@@ -9,6 +9,7 @@ describe("public runtime exports", () => {
       "Button",
       "ButtonLink",
       "Card",
+      "CopyField",
       "EmptyState",
       "Fixture",
       "Hero",

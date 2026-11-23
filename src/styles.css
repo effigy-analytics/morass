@@ -913,6 +913,31 @@
     outline-offset: 2px;
   }
 
+  .m-copy-field__row {
+    align-items: stretch;
+    display: flex;
+    gap: 8px;
+  }
+
+  .m-copy-field__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-overflow: ellipsis;
+  }
+
+  .m-copy-field__row .m-button {
+    flex: 0 0 auto;
+  }
+
+  .m-copy-field__status {
+    min-height: 1.2em;
+  }
+
+  .m-copy-field__status--denied {
+    color: var(--m-color-text);
+    font-weight: 700;
+  }
+
   .m-status-pill {
     align-items: center;
     border-radius: 999px;
