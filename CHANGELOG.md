@@ -2,6 +2,16 @@
 
 All notable Morass changes should be recorded here before publishing a package version.
 
+## Unreleased
+
+- `validateTheme(theme, options?)` accepts `options.pairs`: custom semantic
+  foreground/surface pairs (`SemanticPair`) that are WCAG contrast-checked
+  alongside `REQUIRED_PAIRS`, so application-defined tokens are validated
+  against the surface they render on. Backward compatible: calling
+  `validateTheme(theme)` is unchanged. Adds the `SemanticPair`,
+  `ValidateThemeOptions`, `ThemeTokenName`, and `ThemeTokens` types;
+  `PairFailure.fg`/`bg` widen to `ThemeTokenName`.
+
 ## 0.9.0
 
 - Adds the opt-in Studio Workbench foundation without changing existing

@@ -42,7 +42,7 @@ The supported material utility classes are:
   workbench, sheet, index-card, highlighter, tape, felt-action, and
   semantic-agnostic binder-tab selectors
 
-`validateTheme` checks exported `REQUIRED_PAIRS`: component text uses a 4.5:1 threshold and the input boundary and focus indicator use 3:1, including the AppFrame sidebar and composited Modal backdrop. It throws for missing, invalid, or out-of-range contract colors. This validates the declared Morass pairs, not every combination an application can create, its semantics, or its complete accessibility. Normal-theme colors use tokens; forced-colors fallbacks intentionally use operating-system color keywords.
+`validateTheme` checks exported `REQUIRED_PAIRS`: component text uses a 4.5:1 threshold and the input boundary and focus indicator use 3:1, including the AppFrame sidebar and composited Modal backdrop. It throws for missing, invalid, or out-of-range contract colors. Applications can also pass `validateTheme(theme, { pairs })` to check their own semantic tokens: each `SemanticPair` names a foreground token and the surface chain it renders on (any `--*` custom property), is checked at 4.5:1 unless `required` says otherwise, and is reported in the same `failures` list after the built-in pairs. A declared pair that names a missing or unparseable token, an empty surface chain, or an invalid ratio throws. This validates the declared pairs, not every combination an application can create, its semantics, or its complete accessibility. Normal-theme colors use tokens; forced-colors fallbacks intentionally use operating-system color keywords.
 
 ## Accessibility verification
 

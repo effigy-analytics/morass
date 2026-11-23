@@ -1,5 +1,11 @@
 import type { MorassTheme, MorassTokenName } from "./themes.js";
 
+/** Any CSS custom property name, including application-defined tokens. */
+export type ThemeTokenName = `--${string}`;
+
+/** Token values keyed by custom property name; may include non-Morass tokens. */
+export type ThemeTokens = Record<ThemeTokenName, string>;
+
 export interface RequiredPair {
   /** Compositing chain, topmost first; the last entry must be opaque. */
   bg: MorassTokenName[];
@@ -10,10 +16,33 @@ export interface RequiredPair {
   required?: number;
 }
 
-export interface PairFailure {
-  bg: MorassTokenName[];
+/**
+ * A foreground/surface pair declared by the caller. Same shape as
+ * `RequiredPair`, but the tokens may be any custom property so application
+ * semantic colors can be checked against the surface they render on.
+ */
+export interface SemanticPair {
+  /** Compositing chain, topmost first; the last entry must be opaque. */
+  bg: readonly ThemeTokenName[];
+  /** Where this combination renders; appears in failure reports. */
   context: string;
-  fg: MorassTokenName;
+  fg: ThemeTokenName;
+  /** Required contrast ratio. Defaults to 4.5; use 3 for non-text pairs. */
+  required?: number;
+}
+
+export interface ValidateThemeOptions {
+  /**
+   * Extra pairs checked alongside `REQUIRED_PAIRS`. Failures are reported in
+   * the same `failures` list, in order after the built-in pairs.
+   */
+  pairs?: readonly SemanticPair[];
+}
+
+export interface PairFailure {
+  bg: ThemeTokenName[];
+  context: string;
+  fg: ThemeTokenName;
   ratio: number;
   required: number;
 }
@@ -270,7 +299,7 @@ type Rgba = [number, number, number, number];
  * through, so a future format branch cannot reintroduce a silent
  * nonsense-ratio or NaN pass-through.
  */
-function parseColor(token: MorassTokenName, value: string): Rgba {
+function parseColor(token: ThemeTokenName, value: string): Rgba {
   const [r, g, b, alpha] = parseChannels(token, value);
   const inRange =
     [r, g, b].every(
@@ -285,7 +314,7 @@ function parseColor(token: MorassTokenName, value: string): Rgba {
   return [r, g, b, alpha];
 }
 
-function parseChannels(token: MorassTokenName, value: string): Rgba {
+function parseChannels(token: ThemeTokenName, value: string): Rgba {
   const text = value.trim();
   const hex = text.match(/^#([0-9a-f]{6})([0-9a-f]{2})?$/i);
   if (hex) {
@@ -316,7 +345,7 @@ function parseChannels(token: MorassTokenName, value: string): Rgba {
   throw new Error(`validateTheme: cannot parse ${token} value "${value}"`);
 }
 
-function tokenColor(theme: MorassTheme, token: MorassTokenName): Rgba {
+function tokenColor(theme: ThemeTokens, token: ThemeTokenName): Rgba {
   const value = theme[token];
   if (value === undefined) {
     throw new Error(`validateTheme: theme is missing contract token ${token}`);
@@ -355,26 +384,53 @@ function contrastRatio(
   return (lighter + 0.05) / (darker + 0.05);
 }
 
+function assertValidPair(pair: SemanticPair): void {
+  if (pair.bg.length === 0) {
+    throw new Error(
+      `validateTheme: pair "${pair.context}" must name at least one bg token`,
+    );
+  }
+  if (
+    pair.required !== undefined &&
+    !(Number.isFinite(pair.required) && pair.required >= 1)
+  ) {
+    throw new Error(
+      `validateTheme: pair "${pair.context}" has an invalid required ratio ${pair.required}`,
+    );
+  }
+}
+
 /**
- * Checks a theme (built-in or consumer remap) against REQUIRED_PAIRS.
+ * Checks a theme (built-in or consumer remap) against REQUIRED_PAIRS and any
+ * caller-declared `options.pairs`.
  * Pure and dependency-free; intended for tests/CI, never at runtime.
- * Throws when a contract token is missing or unparseable — a typo must
- * not pass as vacuously valid. Tokens outside the contract are ignored,
- * so passing a superset (e.g. scraped from getComputedStyle) is fine.
+ * Throws when a contract token (or a token named by a declared pair) is
+ * missing or unparseable, or when a declared pair is malformed — a typo must
+ * not pass as vacuously valid. Tokens not named by any pair are ignored, so
+ * passing a superset (e.g. scraped from getComputedStyle) is fine.
  */
-export function validateTheme(theme: MorassTheme): ValidationResult {
+export function validateTheme(
+  theme: MorassTheme | ThemeTokens,
+  options: ValidateThemeOptions = {},
+): ValidationResult {
+  const pairs: readonly (RequiredPair | SemanticPair)[] = [
+    ...REQUIRED_PAIRS,
+    ...(options.pairs ?? []),
+  ];
+  const tokens: ThemeTokens = theme;
   const failures: PairFailure[] = [];
-  for (const pair of REQUIRED_PAIRS) {
+  for (const pair of pairs) {
+    assertValidPair(pair);
     const required = pair.required ?? DEFAULT_REQUIRED;
-    let base = tokenColor(theme, pair.bg[pair.bg.length - 1]).slice(0, 3) as [
+    let base = tokenColor(tokens, pair.bg[pair.bg.length - 1]).slice(0, 3) as [
       number,
       number,
       number,
     ];
     for (let index = pair.bg.length - 2; index >= 0; index -= 1) {
-      base = over(tokenColor(theme, pair.bg[index]), base);
+      base = over(tokenColor(tokens, pair.bg[index]), base);
     }
-    const fg = over(tokenColor(theme, pair.fg), base);
+    const fg = over(tokenColor(tokens, pair.fg), base);
     const ratio = contrastRatio(fg, base);
     if (ratio < required) {
       failures.push({
